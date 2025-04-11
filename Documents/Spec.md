@@ -13,7 +13,6 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 #### Activation Methods
 
 - **Browser Toolbar Icon**: Users can click the ZenReader icon in the Chrome toolbar to activate selection mode.
-- **Context Menu**: Users can right-click on a page and select the "Focus on this section" option to enter selection mode.
 
 #### Selection Mode
 
@@ -70,7 +69,7 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 
 ## 5. Internationalization
 
-- Support for multiple languages including English and Traditional Chinese
+- Support for multiple languages
 - Localized user interface elements
 
 ## 6. Future Considerations (Out of Scope for MVP)
