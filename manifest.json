@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "ZenReader",
+  "version": "1.0",
+  "description": "Focus on what matters - A distraction-free reading experience",
+  "permissions": ["activeTab", "contextMenus"],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "ZenReader"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
