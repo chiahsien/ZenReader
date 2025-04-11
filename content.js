@@ -1,9 +1,9 @@
 /**
- * ZenReader - Content Script
+ * ZenReader - Content Script (Modified with Method 3: Shadow DOM)
  *
  * This script manages the interaction with the web page, including:
  * - Element selection mode
- * - Focus mode activation/deactivation
+ * - Focus mode activation/deactivation with Shadow DOM
  * - Visual styling and overlays
  * - Keyboard shortcuts handling
  */
@@ -15,6 +15,7 @@ let selectedElement = null;
 let overlayElement = null;
 let focusContainer = null;
 let exitButton = null;
+let shadowRoot = null;
 
 /**
  * Initializes the selection mode allowing users to pick an element to focus on
@@ -104,15 +105,6 @@ function exitSelectionMode() {
 }
 
 /**
- * Handles wheel events to prevent scroll propagation to underlying page
- * @param {WheelEvent} event - The wheel event
- */
-function handleWheelEvent(event) {
-  // Prevent the wheel event from propagating to the underlying page
-  event.stopPropagation();
-}
-
-/**
  * Activates focus mode on the selected element
  */
 function enterFocusMode() {
@@ -163,6 +155,7 @@ function createOverlay() {
 
 /**
  * Creates the container that displays the focused content
+ * Uses Shadow DOM for style encapsulation
  */
 function createFocusContainer() {
   // Create main container
@@ -197,9 +190,40 @@ function createFocusContainer() {
   const contentWrapper = document.createElement('div');
   contentWrapper.className = 'zenreader-content-wrapper';
 
+  // Get page background and text colors
+  const bodyStyle = window.getComputedStyle(document.body);
+  const originalBgColor = bodyStyle.backgroundColor;
+  const originalColor = bodyStyle.color;
+
+  // Apply to focus container if they're not transparent/default
+  if (originalBgColor !== 'rgba(0, 0, 0, 0)' && originalBgColor !== 'transparent') {
+    focusContainer.style.backgroundColor = originalBgColor;
+  }
+
+  // Attach shadow DOM to the content wrapper
+  shadowRoot = contentWrapper.attachShadow({ mode: 'open' });
+
+  // Create a container for the content inside shadow DOM
+  const shadowContainer = document.createElement('div');
+  shadowContainer.className = 'shadow-container';
+  if (originalColor !== '' && originalColor !== 'rgb(0, 0, 0)') {
+    shadowContainer.style.color = originalColor;
+  }
+
+  // Add necessary styles to the shadow DOM
+  addStylesToShadowDOM(shadowRoot);
+
   // Clone selected element content
   const contentClone = selectedElement.cloneNode(true);
-  contentWrapper.appendChild(contentClone);
+
+  // Modify links to open in new tabs for safety
+  modifyLinks(contentClone);
+
+  // Add the cloned content to the shadow container
+  shadowContainer.appendChild(contentClone);
+
+  // Add the shadow container to the shadow root
+  shadowRoot.appendChild(shadowContainer);
 
   // Add content wrapper to focus container
   focusContainer.appendChild(contentWrapper);
@@ -207,6 +231,15 @@ function createFocusContainer() {
   // Add focus container to document
   document.body.appendChild(focusContainer);
 
+  // Handle wheel events
+  setupWheelEventHandling(contentWrapper);
+}
+
+/**
+ * Sets up wheel event handling for the content wrapper
+ * @param {HTMLElement} contentWrapper - The content wrapper element
+ */
+function setupWheelEventHandling(contentWrapper) {
   // Prevent wheel events on the container from propagating to the page
   // but allow scrolling within the content wrapper
   focusContainer.addEventListener('wheel', (event) => {
@@ -222,6 +255,140 @@ function createFocusContainer() {
 }
 
 /**
+ * Adds styles to the shadow DOM to maintain original content styling
+ * @param {ShadowRoot} shadow - The shadow root to add styles to
+ */
+function addStylesToShadowDOM(shadow) {
+  // Create style element for base styles
+  const baseStyle = document.createElement('style');
+  baseStyle.textContent = `
+    .shadow-container {
+      font-family: inherit;
+      line-height: 1.5;
+      padding: 20px;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-x: auto;
+    }
+
+    /* Basic element styles */
+    p, div, span, h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 1em;
+    }
+
+    a {
+      color: #0066cc;
+      text-decoration: underline;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    pre, code {
+      background-color: #f5f5f5;
+      border-radius: 3px;
+      padding: 0.2em 0.4em;
+      font-family: monospace;
+    }
+  `;
+
+  shadow.appendChild(baseStyle);
+
+  // Copy stylesheets from the original page
+  try {
+    // Get all stylesheets from the document
+    const styleSheets = Array.from(document.styleSheets);
+
+    // Process each stylesheet
+    styleSheets.forEach(sheet => {
+      try {
+        // Skip cross-origin stylesheets
+        if (!sheet.cssRules) return;
+
+        // Create a new style element for each stylesheet
+        const style = document.createElement('style');
+
+        // Get all the CSS rules
+        Array.from(sheet.cssRules).forEach(rule => {
+          try {
+            // Add each rule to our style element
+            style.textContent += rule.cssText + '\n';
+          } catch (ruleError) {
+            // Skip individual rules that cause errors
+            console.debug('Could not access rule:', ruleError);
+          }
+        });
+
+        // Add the style to the shadow DOM
+        shadow.appendChild(style);
+      } catch (sheetError) {
+        // Skip stylesheets that cause errors (likely cross-origin)
+        console.debug('Could not access stylesheet:', sheetError);
+      }
+    });
+
+    // Copy any inline styles
+    const inlineStyles = document.querySelectorAll('style');
+    inlineStyles.forEach(inlineStyle => {
+      const style = document.createElement('style');
+      style.textContent = inlineStyle.textContent;
+      shadow.appendChild(style);
+    });
+
+    // Add computed styles from the selected element
+    const computedStyle = window.getComputedStyle(selectedElement);
+    const elementStyle = document.createElement('style');
+    elementStyle.textContent = `
+      .shadow-container {
+        color: ${computedStyle.color};
+        font-family: ${computedStyle.fontFamily};
+        font-size: ${computedStyle.fontSize};
+        line-height: ${computedStyle.lineHeight};
+      }
+    `;
+    shadow.appendChild(elementStyle);
+  } catch (e) {
+    console.error('Error copying styles to shadow DOM:', e);
+  }
+}
+
+/**
+ * Modifies links in the cloned content for safety
+ * @param {HTMLElement} element - The cloned element
+ */
+function modifyLinks(element) {
+  const links = element.querySelectorAll('a');
+  links.forEach(link => {
+    // Preserve the href
+    const href = link.getAttribute('href');
+    if (href) {
+      // Make sure relative links still work
+      if (href.startsWith('/') || !href.includes('://')) {
+        // Get the base URL of the current page
+        const baseUrl = window.location.origin;
+        link.setAttribute('href', baseUrl + (href.startsWith('/') ? href : '/' + href));
+      }
+    }
+
+    // Open links in new tabs for safety
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+  });
+}
+
+/**
  * Exits the focus mode and returns to normal view
  */
 function exitFocusMode() {
@@ -232,7 +399,7 @@ function exitFocusMode() {
     overlayElement.parentNode.removeChild(overlayElement);
   }
 
-  // Remove focus container (which includes the toolbar and exit button)
+  // Remove focus container
   if (focusContainer && focusContainer.parentNode) {
     focusContainer.parentNode.removeChild(focusContainer);
   }
@@ -243,6 +410,7 @@ function exitFocusMode() {
   overlayElement = null;
   focusContainer = null;
   exitButton = null;
+  shadowRoot = null;
 
   // Restore scrolling
   document.body.classList.remove('zenreader-focus-active');
