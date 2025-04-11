@@ -15,7 +15,7 @@
 ## Implementation Phase
 
 - [ ] Create core assets
-  - [ ] Design and create extension icon in multiple sizes (16x16, 48x48, 128x128)
+  - [X] Design and create extension icon in multiple sizes (16x16, 48x48, 128x128)
   - [ ] Create popup HTML interface (if needed)
   - [ ] Create CSS for styling the focus mode
 - [ ] Implement core extension functionality
