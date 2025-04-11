@@ -25,6 +25,8 @@
     background-color: rgba(0, 0, 0, 0.75) !important;
     z-index: 2147483646 !important;
     /* Very high z-index to ensure it's on top */
+    pointer-events: all !important;
+    /* Ensure it catches all events */
 }
 
 /* Focus container - holds the toolbar and content wrapper */
@@ -45,6 +47,8 @@
     flex-direction: column !important;
     overflow: hidden !important;
     /* Hide any overflow from children */
+    pointer-events: all !important;
+    /* Ensure it catches all events */
 }
 
 /* Toolbar - contains the exit button and potentially other controls */
@@ -67,6 +71,8 @@
     padding: 30px !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    /* Ensure it can receive wheel events independently */
+    overscroll-behavior: contain !important;
 }
 
 /* Ensure proper content width */
@@ -103,6 +109,11 @@
     color: #333 !important;
     font-size: 16px !important;
     line-height: 1.5 !important;
+}
+
+/* When focus mode is active, prevent scroll on body without changing position */
+body.zenreader-focus-active {
+    overflow: hidden !important;
 }
 
 /* Adjust dark themes */

@@ -104,6 +104,15 @@ function exitSelectionMode() {
 }
 
 /**
+ * Handles wheel events to prevent scroll propagation to underlying page
+ * @param {WheelEvent} event - The wheel event
+ */
+function handleWheelEvent(event) {
+  // Prevent the wheel event from propagating to the underlying page
+  event.stopPropagation();
+}
+
+/**
  * Activates focus mode on the selected element
  */
 function enterFocusMode() {
@@ -117,11 +126,11 @@ function enterFocusMode() {
   // Create focus container
   createFocusContainer();
 
+  // Prevent scrolling of the background page
+  document.body.classList.add('zenreader-focus-active');
+
   // Notify background script of state change
-  chrome.runtime.sendMessage({
-    action: "stateChanged",
-    isActive: true
-  });
+  updateBackgroundState(true);
 
   // Add event listener for ESC key to exit
   document.addEventListener('keydown', handleKeyDown);
@@ -143,6 +152,12 @@ function createOverlay() {
     }
   });
 
+  // Prevent wheel events on the overlay from affecting the underlying page
+  overlayElement.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, { passive: false });
+
   document.body.appendChild(overlayElement);
 }
 
@@ -162,7 +177,7 @@ function createFocusContainer() {
   exitButton = document.createElement('button');
   exitButton.className = 'zenreader-exit-button';
   exitButton.textContent = 'X';
-  exitButton.title = chrome.i18n.getMessage("exitFocusMode");
+  exitButton.title = chrome.i18n?.getMessage("exitFocusMode") || "Exit Focus Mode";
   exitButton.addEventListener('click', exitFocusMode);
 
   // Add exit button to toolbar
@@ -185,8 +200,18 @@ function createFocusContainer() {
   // Add focus container to document
   document.body.appendChild(focusContainer);
 
-  // Prevent scrolling of the background page
-  document.body.style.overflow = 'hidden';
+  // Prevent wheel events on the container from propagating to the page
+  // but allow scrolling within the content wrapper
+  focusContainer.addEventListener('wheel', (event) => {
+    event.stopPropagation();
+  }, { capture: true });
+
+  // Specifically handle wheel events in the content wrapper
+  contentWrapper.addEventListener('wheel', (event) => {
+    // Allow normal scrolling behavior within the wrapper
+    // but prevent it from affecting the underlying page
+    event.stopPropagation();
+  }, { capture: true });
 }
 
 /**
@@ -213,13 +238,33 @@ function exitFocusMode() {
   exitButton = null;
 
   // Restore scrolling
-  document.body.style.overflow = '';
+  document.body.classList.remove('zenreader-focus-active');
 
   // Notify background script of state change
-  chrome.runtime.sendMessage({
-    action: "stateChanged",
-    isActive: false
-  });
+  updateBackgroundState(false);
+}
+
+/**
+ * Updates the background script state, with error handling for invalidated context
+ * @param {boolean} isActive - Whether ZenReader is active
+ */
+function updateBackgroundState(isActive) {
+  try {
+    chrome.runtime.sendMessage({
+      action: "stateChanged",
+      isActive: isActive
+    }, (response) => {
+      // Check for error in the response
+      if (chrome.runtime.lastError) {
+        console.log("Could not communicate with background script:", chrome.runtime.lastError.message);
+        // Continue without error - the UI may be slightly inconsistent but functionality will work
+      }
+    });
+  } catch(e) {
+    // Handle the case where extension context is invalidated
+    console.log("Extension communication error:", e.message);
+    // Continue without error - the UI may be slightly inconsistent but functionality will work
+  }
 }
 
 /**
@@ -241,17 +286,23 @@ function handleKeyDown(event) {
  * Handles messages from the background script
  */
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'activate') {
-    // Start selection mode when activated from toolbar or context menu
-    if (!isSelectionMode && !isFocusMode) {
-      startSelectionMode();
-    } else if (isFocusMode) {
-      // If already in focus mode, exit it
-      exitFocusMode();
-    }
+  try {
+    if (message.action === 'activate') {
+      // Start selection mode when activated from toolbar or context menu
+      if (!isSelectionMode && !isFocusMode) {
+        startSelectionMode();
+      } else if (isFocusMode) {
+        // If already in focus mode, exit it
+        exitFocusMode();
+      }
 
-    // Send a response to close the message channel properly
-    sendResponse({ success: true });
+      // Send a response to close the message channel properly
+      sendResponse({ success: true });
+    }
+  } catch(e) {
+    console.log("Error handling message:", e.message);
+    // Send error response
+    sendResponse({ success: false, error: e.message });
   }
 
   // We're handling this synchronously, so no need to return true
