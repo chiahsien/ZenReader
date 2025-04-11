@@ -72,8 +72,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "stateChanged") {
     isActive = message.isActive;
     updateIcon(isActive);
+
+    // Send a response to close the message channel properly
+    sendResponse({ success: true });
   }
 
-  // Always return true for async response
-  return true;
+  // Return true only if we're actually using sendResponse asynchronously
+  // Since our operation is synchronous, we don't need to return true
+  return false;
 });

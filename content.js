@@ -129,10 +129,20 @@ function enterFocusMode() {
 
 /**
  * Creates the darkened overlay that covers the original page
+ * Also adds click event to allow exiting focus mode by clicking outside the container
  */
 function createOverlay() {
   overlayElement = document.createElement('div');
   overlayElement.className = 'zenreader-overlay';
+
+  // Add click event listener to exit focus mode when clicking the overlay
+  overlayElement.addEventListener('click', (event) => {
+    // Ensure the click was directly on the overlay and not bubbled from content
+    if (event.target === overlayElement) {
+      exitFocusMode();
+    }
+  });
+
   document.body.appendChild(overlayElement);
 }
 
@@ -239,8 +249,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       // If already in focus mode, exit it
       exitFocusMode();
     }
+
+    // Send a response to close the message channel properly
+    sendResponse({ success: true });
   }
 
-  // Always return true for async response
-  return true;
+  // We're handling this synchronously, so no need to return true
+  return false;
 });
