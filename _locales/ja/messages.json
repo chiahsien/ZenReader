@@ -1,0 +1,14 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "拡張機能の名前"
+  },
+  "appDesc": {
+    "message": "重要なコンテンツに集中 - 邪魔のない読書体験",
+    "description": "拡張機能の説明"
+  },
+  "exitFocusMode": {
+    "message": "フォーカスモードを終了",
+    "description": "フォーカスモード終了ボタンのテキスト"
+  }
+}

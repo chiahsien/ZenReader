@@ -1,0 +1,14 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "اسم الإضافة"
+  },
+  "appDesc": {
+    "message": "ركز على المحتوى المهم - تجربة قراءة بدون تشتيت",
+    "description": "وصف الإضافة"
+  },
+  "exitFocusMode": {
+    "message": "الخروج من وضع التركيز",
+    "description": "نص زر الخروج من وضع التركيز"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "扩展名称"
+  },
+  "appDesc": {
+    "message": "专注于重要内容 - 无干扰的阅读体验",
+    "description": "扩展描述"
+  },
+  "exitFocusMode": {
+    "message": "退出专注模式",
+    "description": "退出专注模式按钮的文字"
+  }
+}
