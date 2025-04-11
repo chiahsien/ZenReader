@@ -173,6 +173,13 @@ function createFocusContainer() {
   const toolbar = document.createElement('div');
   toolbar.className = 'zenreader-toolbar';
 
+  // Create title element in the toolbar
+  const titleElement = document.createElement('div');
+  titleElement.className = 'zenreader-title';
+  titleElement.textContent = document.title;
+  titleElement.title = document.title; // Add tooltip for long titles
+  toolbar.appendChild(titleElement);
+
   // Create exit button in the toolbar
   exitButton = document.createElement('button');
   exitButton.className = 'zenreader-exit-button';

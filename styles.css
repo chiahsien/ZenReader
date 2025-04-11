@@ -51,17 +51,30 @@
     /* Ensure it catches all events */
 }
 
-/* Toolbar - contains the exit button and potentially other controls */
+/* Toolbar - contains the title, exit button and potentially other controls */
 .zenreader-toolbar {
     flex: 0 0 auto !important;
     height: 40px !important;
     display: flex !important;
-    justify-content: flex-end !important;
+    justify-content: space-between !important;
+    /* Changed from flex-end to space-between */
     align-items: center !important;
     padding: 0 10px !important;
     border-bottom: 1px solid #e0e0e0 !important;
     background-color: #f8f8f8 !important;
     border-radius: 5px 5px 0 0 !important;
+}
+
+/* Page title in toolbar */
+.zenreader-title {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    max-width: 80% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    padding-left: 5px !important;
 }
 
 /* Content wrapper - scrollable container for the actual content */
@@ -125,6 +138,10 @@ body.zenreader-focus-active {
     .zenreader-toolbar {
         background-color: #333 !important;
         border-bottom: 1px solid #444 !important;
+    }
+
+    .zenreader-title {
+        color: #f0f0f0 !important;
     }
 
     .zenreader-content-wrapper {
