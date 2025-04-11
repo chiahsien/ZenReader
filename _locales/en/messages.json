@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "The name of the extension"
+  },
+  "appDesc": {
+    "message": "Focus on what matters - A distraction-free reading experience",
+    "description": "The description of the extension"
+  },
+  "focusOnThisSection": {
+    "message": "Focus on this section",
+    "description": "Context menu text for focusing on a section"
+  },
+  "exitFocusMode": {
+    "message": "Exit Focus Mode",
+    "description": "Text for the button to exit focus mode"
+  }
+}

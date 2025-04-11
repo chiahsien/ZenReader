@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "擴充功能名稱"
+  },
+  "appDesc": {
+    "message": "專注於重要內容 - 無干擾的閱讀體驗",
+    "description": "擴充功能描述"
+  },
+  "focusOnThisSection": {
+    "message": "專注在此區域",
+    "description": "右鍵選單中的專注選項文字"
+  },
+  "exitFocusMode": {
+    "message": "退出專注模式",
+    "description": "退出專注模式按鈕的文字"
+  }
+}
