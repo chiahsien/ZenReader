@@ -1,0 +1,101 @@
+/**
+ * ZenReader - Styles
+ *
+ * This stylesheet defines all visual elements for the ZenReader extension including:
+ * - Selection mode highlighting
+ * - Focus mode overlay
+ * - Focus container styling
+ * - Exit button appearance
+ */
+
+/* Selection mode hover effect - highlight elements with pink dashed border */
+.zenreader-hover {
+    outline: 3px dashed #ff69b4 !important;
+    outline-offset: 2px !important;
+    cursor: pointer !important;
+}
+
+/* Overlay - dark background that covers the original page */
+.zenreader-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    z-index: 2147483646 !important;
+    /* Very high z-index to ensure it's on top */
+}
+
+/* Focus container - holds the cloned content */
+.zenreader-focus-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 80% !important;
+    max-width: 1000px !important;
+    max-height: 90vh !important;
+    background-color: white !important;
+    border-radius: 5px !important;
+    padding: 30px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    overflow-y: auto !important;
+    z-index: 2147483647 !important;
+    /* Highest z-index to be on top of overlay */
+}
+
+/* Ensure proper content width */
+.zenreader-focus-container>* {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    /* Preserve original styles but ensure it fits the container */
+    max-width: 100% !important;
+}
+
+/* Exit button */
+.zenreader-exit-button {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background-color: #f0f0f0 !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.2s !important;
+}
+
+.zenreader-exit-button:hover {
+    background-color: #e0e0e0 !important;
+}
+
+/* Ensure text is readable */
+.zenreader-focus-container {
+    color: #333 !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+}
+
+/* Adjust dark themes */
+@media (prefers-color-scheme: dark) {
+    .zenreader-focus-container {
+        background-color: #222 !important;
+        color: #f0f0f0 !important;
+    }
+
+    .zenreader-exit-button {
+        background-color: #444 !important;
+        color: #f0f0f0 !important;
+    }
+
+    .zenreader-exit-button:hover {
+        background-color: #555 !important;
+    }
+}
