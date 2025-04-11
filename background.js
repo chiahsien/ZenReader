@@ -3,7 +3,6 @@
  *
  * This script handles the extension's background process, including:
  * - Icon click handling in the Chrome toolbar
- * - Context menu creation and handling
  * - Communication with content script
  */
 
@@ -29,42 +28,25 @@ function updateIcon(active) {
 }
 
 /**
- * Creates context menu item for the extension
- */
-function createContextMenu() {
-  chrome.contextMenus.create({
-    id: "zenreader",
-    title: chrome.i18n.getMessage("focusOnThisSection"),
-    contexts: ["page", "selection", "link", "image", "video"]
-  });
-}
-
-/**
  * Sends message to content script to initiate selection mode or toggle focus mode
  * @param {number} tabId - ID of the current tab
- * @param {Object} info - Information about the context click
  */
-function activateZenReader(tabId, info = {}) {
+function activateZenReader(tabId) {
   chrome.tabs.sendMessage(tabId, {
     action: "activate",
-    source: info.menuItemId ? "contextMenu" : "toolbar",
-    info: info
+    source: "toolbar"
   });
 }
 
 // Set up event listeners when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
-  createContextMenu();
+  // Initial setup (no context menu)
+  console.log("ZenReader extension installed");
 });
 
 // Handle toolbar icon clicks
 chrome.action.onClicked.addListener((tab) => {
   activateZenReader(tab.id);
-});
-
-// Handle context menu clicks
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  activateZenReader(tab.id, info);
 });
 
 // Listen for messages from content script
@@ -77,7 +59,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ success: true });
   }
 
-  // Return true only if we're actually using sendResponse asynchronously
-  // Since our operation is synchronous, we don't need to return true
+  // Return false since our operation is synchronous
   return false;
 });
