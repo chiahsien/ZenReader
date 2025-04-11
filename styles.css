@@ -99,6 +99,10 @@
 .zenreader-exit-button {
     width: 30px !important;
     height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
     border-radius: 50% !important;
     background-color: #f0f0f0 !important;
     border: none !important;
@@ -110,6 +114,9 @@
     justify-content: center !important;
     transition: background-color 0.2s !important;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
 }
 
 .zenreader-exit-button:hover {
