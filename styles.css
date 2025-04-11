@@ -6,6 +6,7 @@
  * - Focus mode overlay
  * - Focus container styling
  * - Exit button appearance
+ * - RTL language support for Arabic and other RTL languages
  */
 
 /* Selection mode hover effect - highlight elements with pink dashed border */
@@ -154,4 +155,32 @@ body.zenreader-focus-active {
     .zenreader-exit-button:hover {
         background-color: #555 !important;
     }
+}
+
+/* RTL Language Support */
+html[dir="rtl"] .zenreader-toolbar {
+    direction: rtl !important;
+}
+
+html[dir="rtl"] .zenreader-title {
+    padding-left: 0 !important;
+    padding-right: 5px !important;
+}
+
+/* Ensure cloned content inherits RTL direction from parent document */
+html[dir="rtl"] .zenreader-content-wrapper {
+    direction: rtl !important;
+}
+
+/* Shadow container should also respect RTL */
+html[dir="rtl"] .shadow-container {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* Handle RTL for any elements with explicit left/right positioning */
+html[dir="rtl"] .zenreader-exit-button {
+    /* If X is using a transform or direction-specific icon */
+    transform: scaleX(1) !important;
+    /* Adjust if needed for your X design */
 }
