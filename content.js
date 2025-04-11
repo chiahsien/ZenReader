@@ -140,37 +140,43 @@ function createOverlay() {
  * Creates the container that displays the focused content
  */
 function createFocusContainer() {
-  // Create container for focused content
+  // Create main container
   focusContainer = document.createElement('div');
   focusContainer.className = 'zenreader-focus-container';
 
-  // Clone selected element content
-  const contentClone = selectedElement.cloneNode(true);
-  focusContainer.appendChild(contentClone);
+  // Create toolbar
+  const toolbar = document.createElement('div');
+  toolbar.className = 'zenreader-toolbar';
 
-  // Create exit button
-  createExitButton();
-
-  // Add to document
-  document.body.appendChild(focusContainer);
-
-  // Prevent scrolling of the background page
-  document.body.style.overflow = 'hidden';
-}
-
-/**
- * Creates the exit button in the corner of focus mode
- */
-function createExitButton() {
+  // Create exit button in the toolbar
   exitButton = document.createElement('button');
   exitButton.className = 'zenreader-exit-button';
   exitButton.textContent = 'X';
   exitButton.title = chrome.i18n.getMessage("exitFocusMode");
-
   exitButton.addEventListener('click', exitFocusMode);
 
-  // Add to focus container
-  focusContainer.appendChild(exitButton);
+  // Add exit button to toolbar
+  toolbar.appendChild(exitButton);
+
+  // Add toolbar to focus container
+  focusContainer.appendChild(toolbar);
+
+  // Create content wrapper for scrollable content
+  const contentWrapper = document.createElement('div');
+  contentWrapper.className = 'zenreader-content-wrapper';
+
+  // Clone selected element content
+  const contentClone = selectedElement.cloneNode(true);
+  contentWrapper.appendChild(contentClone);
+
+  // Add content wrapper to focus container
+  focusContainer.appendChild(contentWrapper);
+
+  // Add focus container to document
+  document.body.appendChild(focusContainer);
+
+  // Prevent scrolling of the background page
+  document.body.style.overflow = 'hidden';
 }
 
 /**
@@ -184,7 +190,7 @@ function exitFocusMode() {
     overlayElement.parentNode.removeChild(overlayElement);
   }
 
-  // Remove focus container
+  // Remove focus container (which includes the toolbar and exit button)
   if (focusContainer && focusContainer.parentNode) {
     focusContainer.parentNode.removeChild(focusContainer);
   }

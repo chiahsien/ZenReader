@@ -27,7 +27,7 @@
     /* Very high z-index to ensure it's on top */
 }
 
-/* Focus container - holds the cloned content */
+/* Focus container - holds the toolbar and content wrapper */
 .zenreader-focus-container {
     position: fixed !important;
     top: 50% !important;
@@ -38,15 +38,39 @@
     max-height: 90vh !important;
     background-color: white !important;
     border-radius: 5px !important;
-    padding: 30px !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-    overflow-y: auto !important;
     z-index: 2147483647 !important;
     /* Highest z-index to be on top of overlay */
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    /* Hide any overflow from children */
+}
+
+/* Toolbar - contains the exit button and potentially other controls */
+.zenreader-toolbar {
+    flex: 0 0 auto !important;
+    height: 40px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    padding: 0 10px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    background-color: #f8f8f8 !important;
+    border-radius: 5px 5px 0 0 !important;
+}
+
+/* Content wrapper - scrollable container for the actual content */
+.zenreader-content-wrapper {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    padding: 30px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* Ensure proper content width */
-.zenreader-focus-container>* {
+.zenreader-content-wrapper>* {
     width: 100% !important;
     box-sizing: border-box !important;
     /* Preserve original styles but ensure it fits the container */
@@ -55,9 +79,6 @@
 
 /* Exit button */
 .zenreader-exit-button {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
     width: 30px !important;
     height: 30px !important;
     border-radius: 50% !important;
@@ -70,6 +91,7 @@
     align-items: center !important;
     justify-content: center !important;
     transition: background-color 0.2s !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
 .zenreader-exit-button:hover {
@@ -77,7 +99,7 @@
 }
 
 /* Ensure text is readable */
-.zenreader-focus-container {
+.zenreader-content-wrapper {
     color: #333 !important;
     font-size: 16px !important;
     line-height: 1.5 !important;
@@ -87,6 +109,14 @@
 @media (prefers-color-scheme: dark) {
     .zenreader-focus-container {
         background-color: #222 !important;
+    }
+
+    .zenreader-toolbar {
+        background-color: #333 !important;
+        border-bottom: 1px solid #444 !important;
+    }
+
+    .zenreader-content-wrapper {
         color: #f0f0f0 !important;
     }
 
