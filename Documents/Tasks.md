@@ -41,7 +41,7 @@
 
 ## Testing Phase
 
-- [ ] Manual testing on various websites
+- [X] Manual testing on various websites
 - [X] Bug fixing and refinement
   - [X] Fix any style preservation issues
   - [X] Ensure proper focus mode behavior
