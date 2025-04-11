@@ -37,6 +37,35 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 4. Click "Load unpacked" and select the ZenReader directory
 5. The extension should now be installed and visible in your toolbar
 
+## Development
+
+### Project Structure
+
+- `manifest.json` - Extension configuration
+- `background.js` - Background script for extension management
+- `content.js` - Content script for webpage interaction
+- `styles.css` - Styling for the focus mode
+- `_locales/` - Internationalization files
+- `icons/` - Extension icons in various sizes
+
+### Building for Production
+
+A build script is included to package the extension for Chrome Web Store submission:
+
+```bash
+# Make the script executable
+chmod +x build.sh
+
+# Run the build script
+./build.sh
+```
+
+The script will:
+- Extract the current version from manifest.json
+- Create a zip file with the necessary files
+- Remove development files
+- Output a production-ready package
+
 ## Technical Details
 
 ZenReader uses Shadow DOM for style encapsulation, ensuring that the original styling of selected content is preserved while preventing style leakage between the webpage and the focus mode interface.

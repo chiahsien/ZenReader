@@ -25,7 +25,7 @@
   - [X] Implement content script for webpage interaction
   - [X] Build manual selection mode logic
     - [X] Toolbar icon activation (FR1)
-    - [X] Context menu activation (FR2)
+    - ~~ Context menu activation (FR2)~~
     - [X] Selection mode visual feedback (FR4)
     - [X] Element selection handler (FR5)
     - [X] ESC key for cancelling selection (FR6)
