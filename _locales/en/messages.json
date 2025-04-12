@@ -10,5 +10,9 @@
   "exitFocusMode": {
     "message": "Exit Focus Mode",
     "description": "Text for the button to exit focus mode"
+  },
+  "enterFocusMode": {
+    "message": "Enter Focus Mode",
+    "description": "Text for the context menu item to enter focus mode"
   }
 }

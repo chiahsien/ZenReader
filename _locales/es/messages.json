@@ -10,5 +10,9 @@
   "exitFocusMode": {
     "message": "Salir del modo enfoque",
     "description": "Texto del botón para salir del modo enfoque"
+  },
+  "enterFocusMode": {
+    "message": "Entrar en modo enfoque",
+    "description": "Texto del elemento del menú contextual para entrar en modo enfoque"
   }
 }
