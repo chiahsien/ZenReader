@@ -13,6 +13,7 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 #### Activation Methods
 
 - **Browser Toolbar Icon**: Users can click the ZenReader icon in the Chrome toolbar to activate selection mode.
+- **Context Menu**: Users can right-click anywhere on the page and select "Enter Focus Mode" from the context menu to activate selection mode.
 
 #### Selection Mode
 
@@ -30,10 +31,12 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
   - Clicking the exit button in the top-right corner of the focus container
   - Clicking the browser toolbar icon again
   - Clicking outside the focus container on the overlay
+  - Right-clicking and selecting "Exit Focus Mode" from the context menu
 
 ### 2.2 Extension Interface
 
 - **Icon State**: The extension icon visually indicates whether ZenReader is active or inactive.
+- **Context Menu**: The context menu displays "Enter Focus Mode" when inactive and "Exit Focus Mode" when active.
 - **Toolbar**: Focus mode includes a toolbar displaying the page title and an exit button.
 
 ## 3. User Experience
@@ -44,7 +47,7 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 2. User selects the content element they want to focus on
 3. The selected content appears in focus mode with the rest of the page dimmed
 4. User reads content without distractions
-5. User exits focus mode when finished
+5. User exits focus mode when finished using any of the available exit methods
 
 ### 3.2 Visual Design
 
@@ -52,6 +55,7 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 - **Overlay**: Dark background (75% opacity) covering the entire page
 - **Focus Container**: Clean, minimal design with subtle shadows and rounded corners
 - **Exit Button**: Circular button with an "X" in the top-right corner
+- **Context Menu**: Standard browser context menu with localized text
 
 ## 4. Compatibility and Performance
 
@@ -69,8 +73,8 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 
 ## 5. Internationalization
 
-- Support for multiple languages
-- Localized user interface elements
+- Support for multiple languages including English, Chinese (Traditional and Simplified), French, German, Spanish, Japanese, Korean, Portuguese, and Arabic
+- Localized user interface elements including context menu entries
 
 ## 6. Future Considerations (Out of Scope for MVP)
 
