@@ -19,7 +19,20 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": [
+        "content/utils/colorUtils.js",
+        "content/utils/domUtils.js",
+        "content/utils/messageHandler.js",
+        "content/styles/styleCache.js",
+        "content/styles/elementCloner.js",
+        "content/styles/shadowDomStyles.js",
+        "content/styles/layoutFixer.js",
+        "content/styles/styleManager.js",
+        "content/selectionMode.js",
+        "content/focusMode.js",
+        "content/state.js",
+        "content/index.js"
+      ],
       "css": ["styles.css"]
     }
   ],
