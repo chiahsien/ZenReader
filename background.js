@@ -64,8 +64,7 @@ function createContextMenu() {
  */
 function activateZenReader(tabId) {
   chrome.tabs.sendMessage(tabId, {
-    action: "activate",
-    source: "toolbar"
+    action: "activate"
   });
 }
 
@@ -85,10 +84,7 @@ chrome.action.onClicked.addListener((tab) => {
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "zenreader-toggle") {
-    chrome.tabs.sendMessage(tab.id, {
-      action: "activate",
-      source: "contextMenu"
-    });
+    activateZenReader(tab.id);
   }
 });
 
