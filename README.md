@@ -29,7 +29,7 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 ### From Chrome Web Store
 
-*(Coming soon)*
+_(Coming soon)_
 
 ### Manual Installation (Developer Mode)
 
@@ -43,16 +43,29 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 ### Project Structure
 
-- `manifest.json` - Extension configuration
-- `background.js` - Background script for extension management
-- `content/` - Content scripts for webpage interaction
-  - `focusMode.js` - Reading mode implementation
-  - `selectionMode.js` - Element selection handling
-  - `state.js` - State management
-  - `utils/` - Utility functions for DOM and style management
-- `styles.css` - Global styles for the extension
-- `_locales/` - Internationalization files
-- `icons/` - Extension icons in various sizes
+```
+ZenReader/
+├── manifest.json               # Extension configuration
+├── background.js               # Background script for extension management
+├── styles.css                  # Global styles for the extension
+├── icons/                      # Extension icons in various sizes
+├── _locales/                   # Internationalization files
+└── content/                    # Content scripts for webpage interaction
+    ├── index.js                # Main entry point for content scripts
+    ├── focusMode.js            # Reading mode implementation
+    ├── selectionMode.js        # Element selection handling
+    ├── state.js                # State management
+    ├── styles/                 # Style management
+    │   ├── elementCloner.js    # Style preservation for cloned elements
+    │   ├── layoutFixer.js      # Fixing layout issues
+    │   ├── shadowDomStyles.js  # Shadow DOM styling
+    │   ├── styleCache.js       # Caching computed styles
+    │   └── styleManager.js     # Central style coordination
+    └── utils/                  # Utility functions
+        ├── colorUtils.js       # Color analysis and manipulation
+        ├── domUtils.js         # DOM manipulation utilities
+        └── messageHandler.js   # Communication with background script
+```
 
 ### Building for Production
 
@@ -67,6 +80,7 @@ chmod +x build.sh
 ```
 
 The script will:
+
 - Extract the current version from manifest.json
 - Create a zip file with the necessary files
 - Remove development files
@@ -77,9 +91,13 @@ The script will:
 ZenReader uses Shadow DOM for style encapsulation, ensuring that the original styling of selected content is preserved while preventing style leakage between the webpage and the focus mode interface.
 
 Key technical features:
+
 - **Shadow DOM** for style isolation
+- **Style caching system** for performance optimization
+- **Color analysis** for adapting to page themes (light/dark)
 - **Event propagation management** for proper scrolling behavior
 - **Computed style preservation** to maintain the look and feel of original content
+- **Special element handling** for images, tables, and code blocks
 - **Responsive container sizing** using viewport units
 - **RTL language support** for multilingual compatibility
 
@@ -99,8 +117,7 @@ We welcome contributions! Please feel free to submit issues or pull requests.
 ## Roadmap
 
 Future enhancements being considered:
-- Automatic content detection
-- Site preference memory
+
 - Minimum font size settings
-- Theming and customization options
-- Enhanced interactive element support
+- Keyboard shortcut customization
+- Additional customization options

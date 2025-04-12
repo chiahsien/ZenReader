@@ -74,11 +74,9 @@ The primary feature of ZenReader is its manual focus mode, which allows users to
 
 ## 6. Future Considerations (Out of Scope for MVP)
 
-- Automatic content detection
-- Site preference memory
 - Minimum font size settings
-- Theming and customization options
-- Enhanced interactive element support
+- Keyboard shortcut customization
+- Additional customization options
 
 ## 7. Limitations
 
