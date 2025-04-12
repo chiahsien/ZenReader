@@ -4,6 +4,8 @@
 
 ZenReader is a Chrome extension designed to provide a distraction-free reading experience while preserving the original styling of web content. It allows users to focus on specific sections of a webpage by creating an overlay that highlights only the content they want to read.
 
+![screenshot](screenshots/1.png)
+
 ## Features
 
 - **Manual Selection Mode**: Select any element on a webpage to focus on
