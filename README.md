@@ -18,7 +18,7 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 2. **Select a section** on the webpage you want to focus on (elements will highlight when hovered)
 3. **Read content** in distraction-free focus mode
 4. **Exit focus mode** by:
-   - Pressing the ESC key
+   - Pressing the `ESC` key
    - Clicking the exit button in the top-right corner
    - Clicking outside the focus container
    - Clicking the browser toolbar icon again
@@ -33,8 +33,8 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 1. Download or clone this repository
 2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" by toggling the switch in the top-right corner
-4. Click "Load unpacked" and select the ZenReader directory
+3. Enable `Developer mode` by toggling the switch in the top-right corner
+4. Click `Load unpacked` and select the ZenReader directory
 5. The extension should now be installed and visible in your toolbar
 
 ## Development
@@ -43,8 +43,12 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 - `manifest.json` - Extension configuration
 - `background.js` - Background script for extension management
-- `content.js` - Content script for webpage interaction
-- `styles.css` - Styling for the focus mode
+- `content/` - Content scripts for webpage interaction
+  - `focusMode.js` - Reading mode implementation
+  - `selectionMode.js` - Element selection handling
+  - `state.js` - State management
+  - `utils/` - Utility functions for DOM and style management
+- `styles.css` - Global styles for the extension
 - `_locales/` - Internationalization files
 - `icons/` - Extension icons in various sizes
 
@@ -80,7 +84,7 @@ Key technical features:
 ## Browser Compatibility
 
 - Google Chrome (latest version)
-- Chromium-based browsers (Edge, Brave, etc.)
+- Chromium-based browsers (Edge, Brave, Vivaldi, etc.)
 
 ## License
 
@@ -88,7 +92,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contributing
 
-We welcome contributions! Feel free to submit issues or pull requests.
+We welcome contributions! Please feel free to submit issues or pull requests.
 
 ## Roadmap
 
