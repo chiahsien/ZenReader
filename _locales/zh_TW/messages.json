@@ -10,5 +10,9 @@
   "exitFocusMode": {
     "message": "退出專注模式",
     "description": "退出專注模式按鈕的文字"
+  },
+  "enterFocusMode": {
+    "message": "進入專注模式",
+    "description": "進入專注模式右鍵選單文字"
   }
 }

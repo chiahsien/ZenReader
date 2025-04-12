@@ -8,6 +8,9 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 ## Features
 
+- **Multiple Activation Methods**:
+  - Click the extension icon in the toolbar
+  - Use the context menu (right-click on any webpage)
 - **Manual Selection Mode**: Select any element on a webpage to focus on
 - **Style Preservation**: Keeps original styling of content including fonts, colors, and layouts
 - **Responsive Design**: Adjusts to different screen sizes and orientations
@@ -16,7 +19,9 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 ## How to Use
 
-1. **Activate ZenReader** by clicking the extension icon in your browser toolbar
+1. **Activate ZenReader** by:
+   - Clicking the extension icon in your browser toolbar, or
+   - Right-clicking anywhere on the page and selecting "Enter Focus Mode"
 2. **Select a section** on the webpage you want to focus on (elements will highlight when hovered)
 3. **Read content** in distraction-free focus mode
 4. **Exit focus mode** by:
@@ -24,6 +29,7 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
    - Clicking the exit button in the top-right corner
    - Clicking outside the focus container
    - Clicking the browser toolbar icon again
+   - Right-clicking and selecting "Exit Focus Mode"
 
 ## Installation
 

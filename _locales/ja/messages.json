@@ -10,5 +10,9 @@
   "exitFocusMode": {
     "message": "フォーカスモードを終了",
     "description": "フォーカスモード終了ボタンのテキスト"
+  },
+  "enterFocusMode": {
+    "message": "フォーカスモードを開始",
+    "description": "フォーカスモードを開始するコンテキストメニュー項目のテキスト"
   }
 }

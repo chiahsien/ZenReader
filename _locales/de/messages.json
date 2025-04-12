@@ -10,5 +10,9 @@
   "exitFocusMode": {
     "message": "Fokusmodus beenden",
     "description": "Text der Schaltfläche zum Beenden des Fokusmodus"
+  },
+  "enterFocusMode": {
+    "message": "Fokusmodus starten",
+    "description": "Text des Kontextmenüpunkts zum Starten des Fokusmodus"
   }
 }

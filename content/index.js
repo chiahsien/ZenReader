@@ -27,9 +27,8 @@ const zenReaderState = {
 
 /**
  * Activates the ZenReader extension when triggered by background script
- * @param {string} source - The source of activation (toolbar or context menu)
  */
-function activateZenReader(source) {
+function activateZenReader() {
   if (zenReaderState.isSelectionMode || zenReaderState.isFocusMode) {
     if (zenReaderState.isFocusMode) {
       exitFocusMode();
