@@ -150,46 +150,47 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
     }
 
     if (value && value !== 'none' && value !== 'normal' && value !== '0px' &&
-        value !== 'rgba(0, 0, 0, 0)' && value !== 'transparent') {
+      value !== 'rgba(0, 0, 0, 0)' && value !== 'transparent') {
       targetElement.style[camelProp] = value;
     }
   });
 
   // Special handling for links
-  if (targetElement.tagName === 'A') {
+  if (targetElement.tagName.toLowerCase() === 'a') {
     // Preserve link color and decoration
     targetElement.style.color = computedStyle.color;
     targetElement.style.textDecoration = computedStyle.textDecoration;
   }
 
   // Special handling for images
-  if (targetElement.tagName === 'IMG') {
+  if (targetElement.tagName.toLowerCase() === 'img') {
     targetElement.style.maxWidth = '100%';
     targetElement.style.height = 'auto';
     targetElement.style.display = 'inline-block';
   }
 
   // Special handling for common tags
-  if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(targetElement.tagName)) {
+  const tagNameUpper = targetElement.tagName.toUpperCase();
+  if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(tagNameUpper)) {
     // Keep heading styles
     targetElement.style.fontWeight = computedStyle.fontWeight || 'bold';
     targetElement.style.margin = computedStyle.margin || '0.5em 0';
     targetElement.style.lineHeight = computedStyle.lineHeight || '1.2';
   }
 
-  if (targetElement.tagName === 'P') {
+  if (tagNameUpper === 'P') {
     // Keep paragraph spacing
     targetElement.style.margin = computedStyle.margin || '1em 0';
   }
 
-  if (['UL', 'OL'].includes(targetElement.tagName)) {
+  if (['UL', 'OL'].includes(tagNameUpper)) {
     // Keep list styles
     targetElement.style.paddingLeft = computedStyle.paddingLeft || '40px';
     targetElement.style.marginTop = computedStyle.marginTop || '1em';
     targetElement.style.marginBottom = computedStyle.marginBottom || '1em';
   }
 
-  if (targetElement.tagName === 'PRE' || targetElement.tagName === 'CODE') {
+  if (tagNameUpper === 'PRE' || tagNameUpper === 'CODE') {
     // Keep code formatting
     targetElement.style.fontFamily = 'monospace';
     targetElement.style.whiteSpace = 'pre-wrap';

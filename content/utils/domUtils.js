@@ -34,7 +34,8 @@ function modifyLinks(element) {
   const floatElements = element.querySelectorAll('[style*="float:"], [style*="float :"]');
   floatElements.forEach(el => {
     // Prevent floating that might break layout
-    if (el.tagName !== 'IMG') { // Keep float for images if needed
+    const tagNameLower = el.tagName.toLowerCase();
+    if (tagNameLower !== 'img') { // Keep float for images if needed
       el.style.setProperty('float', 'none', 'important');
       el.style.setProperty('width', '100%', 'important');
     }
@@ -74,7 +75,8 @@ function modifyLinks(element) {
   // 5. Fix specific side-aligned elements
   const sideElements = element.querySelectorAll('[class*="left"], [class*="right"], [class*="side"]');
   sideElements.forEach(el => {
-    if (el.tagName !== 'IMG' && el.tagName !== 'SPAN') {
+    const tagNameLower = el.tagName.toLowerCase();
+    if (tagNameLower !== 'img' && tagNameLower !== 'span') {
       el.style.setProperty('float', 'none', 'important');
       el.style.setProperty('width', '100%', 'important');
       el.style.setProperty('margin-left', '0', 'important');
