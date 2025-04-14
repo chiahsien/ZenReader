@@ -26,6 +26,12 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
       overflow-x: auto;
     }
 
+    /* First child element - remove horizontal margins/paddings and set vertical paddings */
+    .shadow-container > *:first-child {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     /* Basic element styles */
     p, div, span, h1, h2, h3, h4, h5, h6 {
       margin-bottom: 1em;
@@ -220,6 +226,44 @@ function createSpecialCssRules(colors) {
       max-width: 100% !important;
       margin-left: 0 !important;
       margin-right: 0 !important;
+    }
+
+    /* 改進：標籤相關元素保留原有佈局 */
+    [class*="tag"],
+    [class*="label"],
+    [class*="badge"],
+    [class*="pill"],
+    [class*="chip"],
+    [class*="hashtag"],
+    [id*="tag"],
+    [id*="label"],
+    [id*="badge"],
+    [id*="pill"],
+    [id*="chip"],
+    [id*="hashtag"] {
+      width: auto !important;
+      max-width: none !important;
+      display: inline-block !important;
+      vertical-align: middle !important;
+    }
+
+    /* 為標籤容器保留佈局 */
+    [class*="tags"],
+    [class*="labels"],
+    [class*="badges"],
+    [class*="pills"],
+    [class*="chips"],
+    [class*="hashtags"],
+    [id*="tags"],
+    [id*="labels"],
+    [id*="badges"],
+    [id*="pills"],
+    [id*="chips"],
+    [id*="hashtags"] {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      gap: 0.5em !important;
     }
 
     /* Ensure grid and flex items expand properly */
