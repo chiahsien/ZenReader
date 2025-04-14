@@ -7,11 +7,17 @@
 
 /**
  * Activates focus mode on the selected element
+ * Enhanced with better state management
  */
 function enterFocusMode() {
   if (zenReaderState.isFocusMode || !zenReaderState.selectedElement) return;
 
+  // Set state to true BEFORE any other operations
   zenReaderState.isFocusMode = true;
+
+  // Notify background script of state change immediately
+  // This ensures the context menu gets updated promptly
+  updateBackgroundState(true);
 
   // Clear the style cache before we begin
   clearStyleCache();
@@ -28,11 +34,46 @@ function enterFocusMode() {
   // Prevent scrolling of the background page
   document.body.classList.add('zenreader-focus-active');
 
-  // Notify background script of state change
-  updateBackgroundState(true);
-
   // Add event listener for ESC key to exit
   document.addEventListener('keydown', handleKeyDown);
+}
+
+/**
+ * Exits the focus mode and returns to normal view
+ * Enhanced with better state management
+ */
+function exitFocusMode() {
+  if (!zenReaderState.isFocusMode) return;
+
+  // Set state to false BEFORE any other operations
+  zenReaderState.isFocusMode = false;
+
+  // Notify background script of state change immediately
+  // This ensures the context menu gets updated promptly
+  updateBackgroundState(false);
+
+  // Remove overlay
+  if (zenReaderState.overlayElement && zenReaderState.overlayElement.parentNode) {
+    zenReaderState.overlayElement.parentNode.removeChild(zenReaderState.overlayElement);
+  }
+
+  // Remove focus container
+  if (zenReaderState.focusContainer && zenReaderState.focusContainer.parentNode) {
+    zenReaderState.focusContainer.parentNode.removeChild(zenReaderState.focusContainer);
+  }
+
+  // Reset other state properties
+  zenReaderState.selectedElement = null;
+  zenReaderState.overlayElement = null;
+  zenReaderState.focusContainer = null;
+  zenReaderState.exitButton = null;
+  zenReaderState.shadowRoot = null;
+
+  // Clear the style cache
+  clearStyleCache();
+
+  // Restore scrolling
+  document.body.classList.remove('zenreader-focus-active');
 }
 
 /**
@@ -191,38 +232,4 @@ function setupWheelEventHandling(contentWrapper) {
     // but prevent it from affecting the underlying page
     event.stopPropagation();
   }, { capture: true });
-}
-
-/**
- * Exits the focus mode and returns to normal view
- */
-function exitFocusMode() {
-  if (!zenReaderState.isFocusMode) return;
-
-  // Remove overlay
-  if (zenReaderState.overlayElement && zenReaderState.overlayElement.parentNode) {
-    zenReaderState.overlayElement.parentNode.removeChild(zenReaderState.overlayElement);
-  }
-
-  // Remove focus container
-  if (zenReaderState.focusContainer && zenReaderState.focusContainer.parentNode) {
-    zenReaderState.focusContainer.parentNode.removeChild(zenReaderState.focusContainer);
-  }
-
-  // Reset state
-  zenReaderState.isFocusMode = false;
-  zenReaderState.selectedElement = null;
-  zenReaderState.overlayElement = null;
-  zenReaderState.focusContainer = null;
-  zenReaderState.exitButton = null;
-  zenReaderState.shadowRoot = null;
-
-  // Clear the style cache
-  clearStyleCache();
-
-  // Restore scrolling
-  document.body.classList.remove('zenreader-focus-active');
-
-  // Notify background script of state change
-  updateBackgroundState(false);
 }
