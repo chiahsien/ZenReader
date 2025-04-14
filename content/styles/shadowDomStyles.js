@@ -228,7 +228,7 @@ function createSpecialCssRules(colors) {
       margin-right: 0 !important;
     }
 
-    /* 改進：標籤相關元素保留原有佈局 */
+    /* Improvement: Preserve original layout for tag-related elements */
     [class*="tag"],
     [class*="label"],
     [class*="badge"],
@@ -247,7 +247,7 @@ function createSpecialCssRules(colors) {
       vertical-align: middle !important;
     }
 
-    /* 為標籤容器保留佈局 */
+    /* Preserve layout for tag containers */
     [class*="tags"],
     [class*="labels"],
     [class*="badges"],

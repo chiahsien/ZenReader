@@ -28,7 +28,7 @@ function modifyLinks(element) {
     link.setAttribute('rel', 'noopener noreferrer');
   });
 
-  // 改進：找出可能的標籤容器並保留其佈局
+  // Improvement: Locate potential tag containers and preserve their layout
   const possibleTagContainers = element.querySelectorAll(
     '[class*="tags"], [class*="labels"], [class*="badges"], ' +
     '[class*="pills"], [class*="chips"], [class*="hashtags"], ' +
@@ -37,30 +37,30 @@ function modifyLinks(element) {
   );
 
   possibleTagContainers.forEach(container => {
-    // 確保標籤容器保留其內聯或 flex 屬性
+    // Ensure tag containers retain their inline or flex properties
     const style = window.getComputedStyle(container);
     if (style.display === 'flex' || style.display === 'inline-flex') {
       container.style.setProperty('display', style.display, 'important');
 
-      // 保留 flex 相關屬性
+      // Preserve flex-related properties
       if (style.flexWrap) container.style.setProperty('flex-wrap', style.flexWrap, 'important');
       if (style.flexDirection) container.style.setProperty('flex-direction', style.flexDirection, 'important');
       if (style.justifyContent) container.style.setProperty('justify-content', style.justifyContent, 'important');
       if (style.alignItems) container.style.setProperty('align-items', style.alignItems, 'important');
       if (style.gap) container.style.setProperty('gap', style.gap, 'important');
     } else {
-      // 如果不是 flex，確保適當的內聯顯示
+      // If not flex, ensure proper inline display
       container.style.setProperty('display', 'flex', 'important');
       container.style.setProperty('flex-wrap', 'wrap', 'important');
       container.style.setProperty('align-items', 'center', 'important');
       container.style.setProperty('gap', '0.5em', 'important');
     }
 
-    // 處理容器內的標籤元素
+    // Handle tag elements within the container
     Array.from(container.children).forEach(child => {
-      // 檢查是否是標籤元素
+      // Check if it is a tag element
       if (isPossibleTagElement(child)) {
-        // 確保標籤保留內聯顯示
+        // Ensure tags retain inline display
         child.style.setProperty('display', 'inline-block', 'important');
         child.style.setProperty('width', 'auto', 'important');
         child.style.setProperty('max-width', 'none', 'important');
@@ -70,10 +70,10 @@ function modifyLinks(element) {
 
   // Now fix common layout issues
 
-  // 1. Fix floating elements issues - 排除可能的標籤元素
+  // 1. Fix floating elements issues - Exclude potential tag elements
   const floatElements = element.querySelectorAll('[style*="float:"], [style*="float :"]');
   floatElements.forEach(el => {
-    // 檢查是否可能是標籤元素
+    // Check if it is a potential tag element
     if (!isPossibleTagElement(el)) {
       // Prevent floating that might break layout
       const tagNameLower = el.tagName.toLowerCase();
@@ -101,10 +101,10 @@ function modifyLinks(element) {
     el.style.setProperty('columns', 'auto', 'important');
   });
 
-  // 4. Fix fixed-width containers - 排除可能的標籤容器
+  // 4. Fix fixed-width containers - Exclude potential tag containers
   const containers = element.querySelectorAll('div, article, section, main');
   containers.forEach(container => {
-    // 排除可能的標籤容器
+    // Exclude potential tag containers
     if (!container.className ||
       !(/tags|labels|badges|pills|chips|hashtags/i.test(container.className))) {
       // Check for narrow fixed width
@@ -119,7 +119,7 @@ function modifyLinks(element) {
     }
   });
 
-  // 5. Fix specific side-aligned elements - 排除可能的標籤元素
+  // 5. Fix specific side-aligned elements - Exclude potential tag elements
   const sideElements = element.querySelectorAll('[class*="left"], [class*="right"], [class*="side"]');
   sideElements.forEach(el => {
     if (!isPossibleTagElement(el)) {

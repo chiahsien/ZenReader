@@ -25,8 +25,8 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
     return;
   }
 
-  // 關鍵改進：檢查元素是否屬於可能是標籤集合的一部分
-  // 保留行內元素的原始排列方式
+  // Key improvement: Check if element belongs to a potential tag collection
+  // Preserve the original arrangement of inline elements
   const isPossibleTag = isPossibleTagElement(sourceElement);
 
   // Apply width specially - we want to ensure content fills the container appropriately
@@ -62,27 +62,27 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
       targetElement.style.setProperty('transform', 'none', 'important');
     }
   } else {
-    // 關鍵改進：標籤元素的特殊處理
+    // Key improvement: Special handling for tag elements
     if (isPossibleTag) {
-      // 保留原始顯示類型，避免修改行內元素的排列方式
+      // Preserve the original display type to avoid modifying the arrangement of inline elements
       if (computedStyle.display) {
         targetElement.style.setProperty('display', computedStyle.display, 'important');
       }
 
-      // 保留其他可能影響元素排列的關鍵屬性
+      // Preserve other key properties that might affect element arrangement
       if (computedStyle.float && computedStyle.float !== 'none') {
         targetElement.style.setProperty('float', computedStyle.float, 'important');
       }
 
-      // 保留 flexbox 相關屬性，如果有的話
+      // Preserve flexbox-related properties, if any
       if (computedStyle.flex) {
         targetElement.style.setProperty('flex', computedStyle.flex, 'important');
       }
 
-      // 確保不會強制改變寬度
+      // Ensure width is not forcibly changed
       targetElement.style.removeProperty('width');
 
-      // 保留原始 margin，不強制修改
+      // Preserve original margin, do not forcibly modify
       if (computedStyle.marginLeft) {
         targetElement.style.setProperty('margin-left', computedStyle.marginLeft);
       }
@@ -90,13 +90,13 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
         targetElement.style.setProperty('margin-right', computedStyle.marginRight);
       }
 
-      // 保留 white-space 屬性
+      // Preserve white-space property
       if (computedStyle.whiteSpace) {
         targetElement.style.setProperty('white-space', computedStyle.whiteSpace, 'important');
       }
     } else {
-      // 原有的邏輯，處理非標籤元素
-      // 為非顯式標籤的元素處理寬度
+      // Original logic for handling non-tag elements
+      // Handle width for non-explicit tag elements
       const tagName = targetElement.tagName.toLowerCase();
 
       // Handle elements that should always be full width
@@ -161,7 +161,7 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
   }
 
   // Preserve original display value unless it's none
-  // 改進：對於所有元素（不僅是標籤），確保 display 屬性被保留
+  // Improvement: For all elements (not just tags), ensure the display property is preserved
   const displayValue = computedStyle.display;
   if (displayValue !== 'none') {
     targetElement.style.setProperty('display', displayValue, 'important');
@@ -208,7 +208,7 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
     }
   }
 
-  // 改進：擴展關鍵樣式屬性列表，包含更多與排版相關的屬性
+  // Improvement: Extend the list of key style properties to include more typography-related properties
   const EXTENDED_STYLE_PROPERTIES = [
     ...IMPORTANT_STYLE_PROPERTIES,
     'white-space', 'word-spacing', 'word-break', 'flex', 'flex-direction',
@@ -288,66 +288,66 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
 }
 
 /**
- * 判斷元素是否可能是標籤元素
- * @param {HTMLElement} element - 要檢查的元素
- * @returns {boolean} - 如果元素可能是標籤則返回 true
+ * Determines if an element is likely a tag element
+ * @param {HTMLElement} element - The element to check
+ * @returns {boolean} - Returns true if the element is likely a tag
  */
 function isPossibleTagElement(element) {
   if (!element) return false;
 
-  // 檢查常見的標籤特徵
+  // Check common tag characteristics
   const tagName = element.tagName.toLowerCase();
   const className = (typeof element.className === 'string' ? element.className : (element.className?.baseVal || '')).toLowerCase();
   const id = (element.id || '').toLowerCase();
   const innerText = element.innerText || '';
 
-  // 1. 常見標籤元素標識
+  // 1. Common tag element identifiers
   const commonTagIdentifiers = [
     'tag', 'label', 'badge', 'pill', 'chip', 'hashtag', 'category'
   ];
 
-  // 檢查類名是否包含標籤標識
+  // Check if class name contains tag identifiers
   const hasTagClass = commonTagIdentifiers.some(id => className.includes(id));
 
-  // 檢查 ID 是否包含標籤標識
+  // Check if ID contains tag identifiers
   const hasTagId = commonTagIdentifiers.some(id => id.includes(id));
 
-  // 2. 檢查典型標籤行為特徵
+  // 2. Check typical tag behavior characteristics
 
-  // 標籤通常很短
+  // Tags are usually short
   const isShortText = innerText.length < 30;
 
-  // 標籤通常是簡單元素，不包含複雜子結構
+  // Tags are usually simple elements without complex substructures
   const hasSimpleStructure = element.children.length <= 1;
 
-  // 3. 檢查外觀特徵
+  // 3. Check appearance characteristics
 
-  // 獲取計算樣式
+  // Get computed style
   const style = getStyleFromCache(element) || window.getComputedStyle(element);
 
-  // 標籤通常有邊框半徑
+  // Tags often have border radius
   const hasBorderRadius = style.borderRadius && style.borderRadius !== '0px';
 
-  // 標籤通常顯示為內聯或內聯塊元素
+  // Tags are often displayed as inline or inline-block elements
   const hasInlineDisplay = style.display === 'inline' ||
     style.display === 'inline-block' ||
     style.display === 'inline-flex';
 
-  // 標籤通常有背景色或邊框
+  // Tags often have background color or border
   const hasBackground = style.backgroundColor &&
     style.backgroundColor !== 'transparent' &&
     style.backgroundColor !== 'rgba(0, 0, 0, 0)';
 
   const hasBorder = style.border && style.border !== 'none' && style.border !== '0px';
 
-  // 4. 檢查內容特徵
+  // 4. Check content characteristics
 
-  // 標籤通常有 # 前綴（社交媒體標籤）
+  // Tags often have a # prefix (social media tags)
   const isHashtag = innerText.trim().startsWith('#');
 
-  // 5. 檢查父元素特徵
+  // 5. Check parent element characteristics
 
-  // 標籤通常位於標籤容器中
+  // Tags are often located in tag containers
   let hasTagContainer = false;
   if (element.parentElement) {
     const parentClass = (typeof element.parentElement.className === 'string' ?
@@ -358,7 +358,7 @@ function isPossibleTagElement(element) {
     hasTagContainer = commonTagIdentifiers.some(id => parentClass.includes(id) || parentId.includes(id));
   }
 
-  // 綜合評估：如果滿足多項條件，則可能是標籤
+  // Comprehensive evaluation: If multiple conditions are met, it is likely a tag
   const isTag = (
     hasTagClass ||
     hasTagId ||
