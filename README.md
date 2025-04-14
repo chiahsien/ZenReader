@@ -6,6 +6,16 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 ![screenshot](screenshots/1.png)
 
+## Our Philosophy
+
+While many Reader Mode extensions and browser features strip away original styling to create a standardized reading experience, ZenReader takes a different approach. 
+
+Most reader modes extract the main content and apply their own CSS styles, which makes reading easier but sacrifices the website's original design and visual identity. ZenReader instead preserves the original styling while removing distractions, giving you the best of both worlds:
+
+**Focus on what matters without losing the website's intended visual experience.**
+
+This allows you to enjoy the content creator's design choices while still eliminating surrounding distractions that compete for your attention.
+
 ## Features
 
 - **Multiple Activation Methods**:
