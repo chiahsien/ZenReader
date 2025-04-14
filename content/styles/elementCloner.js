@@ -179,6 +179,35 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
     targetElement.style.setProperty('color', textColor, 'important');
   }
 
+  // Handle background shorthand property and individual properties
+  if (computedStyle.background && computedStyle.background !== 'none' && computedStyle.background !== 'rgba(0, 0, 0, 0)') {
+    // Apply the complete background shorthand property
+    targetElement.style.setProperty('background', computedStyle.background, 'important');
+  } else {
+    // Apply individual background properties if shorthand is not available
+    if (computedStyle.backgroundImage && computedStyle.backgroundImage !== 'none') {
+      targetElement.style.setProperty('background-image', computedStyle.backgroundImage);
+    }
+    if (computedStyle.backgroundPosition) {
+      targetElement.style.setProperty('background-position', computedStyle.backgroundPosition);
+    }
+    if (computedStyle.backgroundRepeat) {
+      targetElement.style.setProperty('background-repeat', computedStyle.backgroundRepeat);
+    }
+    if (computedStyle.backgroundSize && computedStyle.backgroundSize !== 'auto') {
+      targetElement.style.setProperty('background-size', computedStyle.backgroundSize);
+    }
+    if (computedStyle.backgroundOrigin) {
+      targetElement.style.setProperty('background-origin', computedStyle.backgroundOrigin);
+    }
+    if (computedStyle.backgroundClip) {
+      targetElement.style.setProperty('background-clip', computedStyle.backgroundClip);
+    }
+    if (computedStyle.backgroundAttachment) {
+      targetElement.style.setProperty('background-attachment', computedStyle.backgroundAttachment);
+    }
+  }
+
   // 改進：擴展關鍵樣式屬性列表，包含更多與排版相關的屬性
   const EXTENDED_STYLE_PROPERTIES = [
     ...IMPORTANT_STYLE_PROPERTIES,
@@ -195,6 +224,11 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
 
     // Skip width-related properties for top-level elements as we've handled them specially
     if (isTopLevel && (prop === 'width' || prop === 'max-width')) {
+      return;
+    }
+
+    // Skip background properties as we've handled them specially above
+    if (prop.startsWith('background')) {
       return;
     }
 
