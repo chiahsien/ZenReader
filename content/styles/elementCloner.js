@@ -25,6 +25,10 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
     return;
   }
 
+  // 關鍵改進：檢查元素是否屬於可能是標籤集合的一部分
+  // 保留行內元素的原始排列方式
+  const isPossibleTag = isPossibleTagElement(sourceElement);
+
   // Apply width specially - we want to ensure content fills the container appropriately
   if (isTopLevel) {
     // Force top-level element to full width
@@ -58,70 +62,106 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
       targetElement.style.setProperty('transform', 'none', 'important');
     }
   } else {
-    // For non-top-level elements, handle width differently based on element type
-    const tagName = targetElement.tagName.toLowerCase();
-
-    // Handle elements that should always be full width
-    const shouldBeFull = ['div', 'section', 'article', 'main', 'header', 'footer', 'nav', 'aside'];
-    if (shouldBeFull.includes(tagName)) {
-      // Only force width if it has content or other elements inside
-      if (sourceElement.children.length > 0 || sourceElement.innerText.trim().length > 0) {
-        targetElement.style.setProperty('width', '100%', 'important');
+    // 關鍵改進：標籤元素的特殊處理
+    if (isPossibleTag) {
+      // 保留原始顯示類型，避免修改行內元素的排列方式
+      if (computedStyle.display) {
+        targetElement.style.setProperty('display', computedStyle.display, 'important');
       }
-    }
 
-    // Images, videos, iframes should preserve aspect ratio but fit container
-    if (['img', 'video', 'iframe', 'canvas', 'svg'].includes(tagName)) {
-      targetElement.style.setProperty('max-width', '100%', 'important');
-      targetElement.style.setProperty('height', 'auto', 'important');
+      // 保留其他可能影響元素排列的關鍵屬性
+      if (computedStyle.float && computedStyle.float !== 'none') {
+        targetElement.style.setProperty('float', computedStyle.float, 'important');
+      }
 
-      // Center media elements
-      if (tagName === 'img' || tagName === 'video') {
-        // Only center if it's a standalone image (parent only has this element)
-        if (sourceElement.parentElement && sourceElement.parentElement.children.length === 1) {
-          targetElement.style.setProperty('display', 'block', 'important');
-          targetElement.style.setProperty('margin-left', 'auto', 'important');
-          targetElement.style.setProperty('margin-right', 'auto', 'important');
+      // 保留 flexbox 相關屬性，如果有的話
+      if (computedStyle.flex) {
+        targetElement.style.setProperty('flex', computedStyle.flex, 'important');
+      }
+
+      // 確保不會強制改變寬度
+      targetElement.style.removeProperty('width');
+
+      // 保留原始 margin，不強制修改
+      if (computedStyle.marginLeft) {
+        targetElement.style.setProperty('margin-left', computedStyle.marginLeft);
+      }
+      if (computedStyle.marginRight) {
+        targetElement.style.setProperty('margin-right', computedStyle.marginRight);
+      }
+
+      // 保留 white-space 屬性
+      if (computedStyle.whiteSpace) {
+        targetElement.style.setProperty('white-space', computedStyle.whiteSpace, 'important');
+      }
+    } else {
+      // 原有的邏輯，處理非標籤元素
+      // 為非顯式標籤的元素處理寬度
+      const tagName = targetElement.tagName.toLowerCase();
+
+      // Handle elements that should always be full width
+      const shouldBeFull = ['div', 'section', 'article', 'main', 'header', 'footer', 'nav', 'aside'];
+      if (shouldBeFull.includes(tagName)) {
+        // Only force width if it has content or other elements inside
+        if (sourceElement.children.length > 0 || sourceElement.innerText.trim().length > 0) {
+          targetElement.style.setProperty('width', '100%', 'important');
         }
       }
-    }
 
-    // Tables should have appropriate width and scroll if needed
-    if (tagName === 'table') {
-      targetElement.style.setProperty('width', '100%', 'important');
-      targetElement.style.setProperty('max-width', '100%', 'important');
+      // Images, videos, iframes should preserve aspect ratio but fit container
+      if (['img', 'video', 'iframe', 'canvas', 'svg'].includes(tagName)) {
+        targetElement.style.setProperty('max-width', '100%', 'important');
+        targetElement.style.setProperty('height', 'auto', 'important');
 
-      // Add horizontal scrolling for wide tables
-      if (sourceElement.offsetWidth > 500) { // If table is relatively wide
-        targetElement.style.setProperty('display', 'block', 'important');
-        targetElement.style.setProperty('overflow-x', 'auto', 'important');
+        // Center media elements
+        if (tagName === 'img' || tagName === 'video') {
+          // Only center if it's a standalone image (parent only has this element)
+          if (sourceElement.parentElement && sourceElement.parentElement.children.length === 1) {
+            targetElement.style.setProperty('display', 'block', 'important');
+            targetElement.style.setProperty('margin-left', 'auto', 'important');
+            targetElement.style.setProperty('margin-right', 'auto', 'important');
+          }
+        }
       }
-    }
 
-    // Container divs should expand fully
-    if (tagName === 'div') {
-      // Determine if this div is a major container (has many children or paragraphs)
-      const hasParagraphs = sourceElement.querySelectorAll('p').length > 0;
-      const hasHeadings = sourceElement.querySelectorAll('h1, h2, h3, h4, h5, h6').length > 0;
-      const hasMultipleChildren = sourceElement.children.length > 2;
-
-      if (hasParagraphs || hasHeadings || hasMultipleChildren) {
+      // Tables should have appropriate width and scroll if needed
+      if (tagName === 'table') {
         targetElement.style.setProperty('width', '100%', 'important');
+        targetElement.style.setProperty('max-width', '100%', 'important');
 
-        // Check for common container class names
-        const className = targetElement.className || '';
-        const containsContentClass = /content|article|post|main|body|text/i.test(className);
+        // Add horizontal scrolling for wide tables
+        if (sourceElement.offsetWidth > 500) { // If table is relatively wide
+          targetElement.style.setProperty('display', 'block', 'important');
+          targetElement.style.setProperty('overflow-x', 'auto', 'important');
+        }
+      }
 
-        if (containsContentClass) {
-          targetElement.style.setProperty('max-width', '100%', 'important');
-          targetElement.style.setProperty('margin-left', '0', 'important');
-          targetElement.style.setProperty('margin-right', '0', 'important');
+      // Container divs should expand fully
+      if (tagName === 'div') {
+        // Determine if this div is a major container (has many children or paragraphs)
+        const hasParagraphs = sourceElement.querySelectorAll('p').length > 0;
+        const hasHeadings = sourceElement.querySelectorAll('h1, h2, h3, h4, h5, h6').length > 0;
+        const hasMultipleChildren = sourceElement.children.length > 2;
+
+        if (hasParagraphs || hasHeadings || hasMultipleChildren) {
+          targetElement.style.setProperty('width', '100%', 'important');
+
+          // Check for common container class names
+          const className = targetElement.className || '';
+          const containsContentClass = /content|article|post|main|body|text/i.test(className);
+
+          if (containsContentClass) {
+            targetElement.style.setProperty('max-width', '100%', 'important');
+            targetElement.style.setProperty('margin-left', '0', 'important');
+            targetElement.style.setProperty('margin-right', '0', 'important');
+          }
         }
       }
     }
   }
 
   // Preserve original display value unless it's none
+  // 改進：對於所有元素（不僅是標籤），確保 display 屬性被保留
   const displayValue = computedStyle.display;
   if (displayValue !== 'none') {
     targetElement.style.setProperty('display', displayValue, 'important');
@@ -139,8 +179,17 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
     targetElement.style.setProperty('color', textColor, 'important');
   }
 
+  // 改進：擴展關鍵樣式屬性列表，包含更多與排版相關的屬性
+  const EXTENDED_STYLE_PROPERTIES = [
+    ...IMPORTANT_STYLE_PROPERTIES,
+    'white-space', 'word-spacing', 'word-break', 'flex', 'flex-direction',
+    'flex-wrap', 'flex-flow', 'justify-content', 'align-items', 'align-content',
+    'grid', 'grid-template', 'grid-template-columns', 'grid-template-rows',
+    'column-gap', 'row-gap', 'gap'
+  ];
+
   // Apply other important properties
-  IMPORTANT_STYLE_PROPERTIES.forEach(prop => {
+  EXTENDED_STYLE_PROPERTIES.forEach(prop => {
     const camelProp = prop.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
     const value = computedStyle[camelProp];
 
@@ -202,6 +251,89 @@ function applyComputedStylesToElement(targetElement, sourceElement, isMainConten
 
   // Add data attribute to mark as processed
   targetElement.setAttribute('data-zenreader-styled', 'true');
+}
+
+/**
+ * 判斷元素是否可能是標籤元素
+ * @param {HTMLElement} element - 要檢查的元素
+ * @returns {boolean} - 如果元素可能是標籤則返回 true
+ */
+function isPossibleTagElement(element) {
+  if (!element) return false;
+
+  // 檢查常見的標籤特徵
+  const tagName = element.tagName.toLowerCase();
+  const className = (typeof element.className === 'string' ? element.className : (element.className?.baseVal || '')).toLowerCase();
+  const id = (element.id || '').toLowerCase();
+  const innerText = element.innerText || '';
+
+  // 1. 常見標籤元素標識
+  const commonTagIdentifiers = [
+    'tag', 'label', 'badge', 'pill', 'chip', 'hashtag', 'category'
+  ];
+
+  // 檢查類名是否包含標籤標識
+  const hasTagClass = commonTagIdentifiers.some(id => className.includes(id));
+
+  // 檢查 ID 是否包含標籤標識
+  const hasTagId = commonTagIdentifiers.some(id => id.includes(id));
+
+  // 2. 檢查典型標籤行為特徵
+
+  // 標籤通常很短
+  const isShortText = innerText.length < 30;
+
+  // 標籤通常是簡單元素，不包含複雜子結構
+  const hasSimpleStructure = element.children.length <= 1;
+
+  // 3. 檢查外觀特徵
+
+  // 獲取計算樣式
+  const style = getStyleFromCache(element) || window.getComputedStyle(element);
+
+  // 標籤通常有邊框半徑
+  const hasBorderRadius = style.borderRadius && style.borderRadius !== '0px';
+
+  // 標籤通常顯示為內聯或內聯塊元素
+  const hasInlineDisplay = style.display === 'inline' ||
+    style.display === 'inline-block' ||
+    style.display === 'inline-flex';
+
+  // 標籤通常有背景色或邊框
+  const hasBackground = style.backgroundColor &&
+    style.backgroundColor !== 'transparent' &&
+    style.backgroundColor !== 'rgba(0, 0, 0, 0)';
+
+  const hasBorder = style.border && style.border !== 'none' && style.border !== '0px';
+
+  // 4. 檢查內容特徵
+
+  // 標籤通常有 # 前綴（社交媒體標籤）
+  const isHashtag = innerText.trim().startsWith('#');
+
+  // 5. 檢查父元素特徵
+
+  // 標籤通常位於標籤容器中
+  let hasTagContainer = false;
+  if (element.parentElement) {
+    const parentClass = (typeof element.parentElement.className === 'string' ?
+      element.parentElement.className :
+      (element.parentElement.className?.baseVal || '')).toLowerCase();
+    const parentId = (element.parentElement.id || '').toLowerCase();
+
+    hasTagContainer = commonTagIdentifiers.some(id => parentClass.includes(id) || parentId.includes(id));
+  }
+
+  // 綜合評估：如果滿足多項條件，則可能是標籤
+  const isTag = (
+    hasTagClass ||
+    hasTagId ||
+    isHashtag ||
+    hasTagContainer ||
+    (isShortText && hasSimpleStructure && (hasInlineDisplay || hasBorderRadius || hasBackground || hasBorder))
+  );
+
+  return isTag;
 }
 
 /**
