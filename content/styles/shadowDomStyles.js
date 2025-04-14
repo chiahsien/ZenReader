@@ -26,6 +26,12 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
       overflow-x: auto;
     }
 
+    /* First child element - remove horizontal margins/paddings and set vertical paddings */
+    .shadow-container > *:first-child {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     /* Basic element styles */
     p, div, span, h1, h2, h3, h4, h5, h6 {
       margin-bottom: 1em;
