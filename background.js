@@ -34,36 +34,17 @@ function updateIcon(tabId, active) {
 }
 
 /**
- * Updates the context menu by removing the old one and creating a new one with the appropriate state
+ * Updates the context menu title based on ZenReader's active state
  * @param {boolean} active - Whether ZenReader is currently active on the current tab
  */
 function updateContextMenu(active) {
-  // Remove the existing menu item
   if (contextMenuId) {
-    chrome.contextMenus.remove(contextMenuId, () => {
-      // Create a new menu item with state-appropriate title
-      createContextMenuWithState(active);
-    });
-  } else {
-    // If no existing menu (first run), just create a new one
-    createContextMenuWithState(active);
+    const title = active ?
+      chrome.i18n.getMessage("exitFocusMode") :
+      chrome.i18n.getMessage("enterFocusMode");
+
+    chrome.contextMenus.update(contextMenuId, { title });
   }
-}
-
-/**
- * Creates a context menu item with the appropriate state
- * @param {boolean} active - Whether ZenReader is currently active
- */
-function createContextMenuWithState(active) {
-  const title = active ?
-    chrome.i18n.getMessage("exitFocusMode") :
-    chrome.i18n.getMessage("enterFocusMode");
-
-  contextMenuId = chrome.contextMenus.create({
-    id: "zenreader-toggle",
-    title: title,
-    contexts: ["page", "selection"]
-  });
 }
 
 /**
@@ -72,8 +53,14 @@ function createContextMenuWithState(active) {
 function createContextMenu() {
   // Remove any existing menu items to avoid duplicates
   chrome.contextMenus.removeAll(() => {
-    // Create a new context menu item with default inactive state
-    createContextMenuWithState(false);
+    // Create the context menu item with default inactive state
+    const title = chrome.i18n.getMessage("enterFocusMode");
+
+    contextMenuId = chrome.contextMenus.create({
+      id: "zenreader-toggle",
+      title: title,
+      contexts: ["all"]
+    });
   });
 }
 
