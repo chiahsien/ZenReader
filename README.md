@@ -49,7 +49,7 @@ _(Coming soon)_
 
 ### Manual Installation (Developer Mode)
 
-1. Download or clone this repository
+1. Go to [Releases](https://github.com/chiahsien/ZenReader/releases) page to download latest version's zip file, then decompress it.
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable `Developer mode` by toggling the switch in the top-right corner
 4. Click `Load unpacked` and select the ZenReader directory
