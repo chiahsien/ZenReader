@@ -6,7 +6,9 @@ ZenReader is a Chrome extension designed to provide a distraction-free reading e
 
 ![screenshot](screenshots/1.png)
 
-## Our Philosophy
+<a href="https://www.buymeacoffee.com/chiahsien"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=chiahsien&button_colour=5F7FFF&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>
+
+## Philosophy
 
 While many Reader Mode extensions and browser features strip away original styling to create a standardized reading experience, ZenReader takes a different approach. 
 
