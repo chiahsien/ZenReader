@@ -76,21 +76,64 @@ function setPageDirection() {
     document.body.classList.toggle('rtl', isRtl);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Initialize internationalization
+/**
+ * Gets the extension's version from the manifest
+ * @returns {Promise<string>} - A promise that resolves to the version string
+ */
+async function getExtensionVersion() {
     try {
+        // Use the chrome.runtime.getManifest API to get version
+        const manifest = chrome.runtime.getManifest();
+        return manifest.version || '1.0.0';
+    } catch (error) {
+        console.error('Error getting extension version:', error);
+        return '1.0.0'; // Default fallback version
+    }
+}
+
+/**
+ * Gets developer information
+ * @returns {string} - The developer name
+ */
+function getDeveloperInfo() {
+    // This could be fetched from a configuration file or other source
+    // For now, we'll use a hardcoded value
+    return 'Nelson Tai';
+}
+
+/**
+ * Updates the page with dynamic content like version and developer info
+ */
+async function updateDynamicContent() {
+    try {
+        // Update version
+        const versionElement = document.getElementById('version');
+        if (versionElement) {
+            const version = await getExtensionVersion();
+            versionElement.textContent = version;
+        }
+
+        // Update developer info
+        const developerElement = document.getElementById('developer');
+        if (developerElement) {
+            developerElement.textContent = getDeveloperInfo();
+        }
+    } catch (error) {
+        console.error('Error updating dynamic content:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        // Initialize internationalization
         initI18n();
         setPageDirection();
+
+        // Update dynamic content
+        await updateDynamicContent();
+
+        console.log('ZenReader About page initialized');
     } catch (error) {
-        console.error('Error initializing i18n:', error);
-        // If there's an error with chrome.i18n, we'll fall back to default English content
+        console.error('Error initializing about page:', error);
     }
-
-    // Placeholder for the dynamic version detection
-    // Will be implemented in Task 13
-
-    // Set developer name
-    document.getElementById('developer').textContent = 'Your Name';
-
-    console.log('ZenReader About page initialized');
 });
