@@ -115,13 +115,15 @@ body {
     background-color: #2f363d;
 }
 
-.coffee-button {
-    background-color: #ff813f;
-    color: white;
+/* Coffee button container */
+.coffee-button-container {
+    margin: 0 auto;
+    text-align: center;
 }
 
-.coffee-button:hover {
-    background-color: #ff9255;
+/* RTL support */
+html[dir="rtl"] .button {
+    direction: rtl;
 }
 
 /* Responsive design for smaller screens */

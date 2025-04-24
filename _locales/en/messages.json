@@ -14,5 +14,45 @@
   "enterFocusMode": {
     "message": "Enter Focus Mode",
     "description": "Text for the context menu item to enter focus mode"
+  },
+  "aboutZenReader": {
+    "message": "About ZenReader",
+    "description": "Text for about page title and context menu item"
+  },
+  "aboutIntroTitle": {
+    "message": "About ZenReader",
+    "description": "Title for the intro section in the about page"
+  },
+  "aboutDescription": {
+    "message": "ZenReader provides a distraction-free reading experience, allowing you to focus on important content.",
+    "description": "Description of ZenReader functionality"
+  },
+  "aboutDifference": {
+    "message": "Unlike other reader modes, ZenReader preserves the original styling of web content while removing distractions.",
+    "description": "Description of how ZenReader differs from other reader modes"
+  },
+  "aboutPhilosophy": {
+    "message": "This enables you to focus on what matters while still enjoying the website's intended visual experience.",
+    "description": "Description of ZenReader's philosophy"
+  },
+  "feedbackTitle": {
+    "message": "Feedback",
+    "description": "Title for the feedback section"
+  },
+  "githubIssue": {
+    "message": "Submit an issue on GitHub",
+    "description": "Text for the GitHub issue button"
+  },
+  "supportTitle": {
+    "message": "Support Development",
+    "description": "Title for the donation section"
+  },
+  "versionLabel": {
+    "message": "Version",
+    "description": "Label for version information"
+  },
+  "developedBy": {
+    "message": "Developed by",
+    "description": "Label for developer information"
   }
 }

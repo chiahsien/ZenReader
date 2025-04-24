@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About ZenReader</title>
+    <title data-i18n="aboutZenReader">About ZenReader</title>
     <link rel="stylesheet" href="about.css">
     <link rel="icon" href="../icons/icon16.png" type="image/png">
 </head>
@@ -17,8 +17,9 @@
                 <img src="../icons/icon128.png" alt="ZenReader Logo" class="logo">
             </div>
             <h1 class="title">ZenReader</h1>
-            <p class="version">Version <span id="version">1.0.0</span></p>
-            <p class="developer">Developed by <span id="developer">Your Name</span></p>
+            <p class="version"><span data-i18n="versionLabel">Version</span> <span id="version">1.0.0</span></p>
+            <p class="developer"><span data-i18n="developedBy">Developed by</span> <span id="developer">Your Name</span>
+            </p>
         </section>
 
         <!-- Product Introduction Section -->
@@ -48,10 +49,13 @@
         <!-- Donation Section -->
         <section class="section donation-section">
             <h2 class="section-title" data-i18n="supportTitle">Support Development</h2>
-            <a href="https://www.buymeacoffee.com/yourusername" target="_blank" class="button coffee-button"
-                data-i18n="buyMeCoffee">
-                Buy me a coffee
-            </a>
+            <div class="coffee-button-container">
+                <!-- Buy Me A Coffee Script -->
+                <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+                    data-name="bmc-button" data-slug="chiahsien" data-color="#5F7FFF" data-emoji="☕" data-font="Inter"
+                    data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff"
+                    data-coffee-color="#FFDD00"></script>
+            </div>
         </section>
     </div>
 
