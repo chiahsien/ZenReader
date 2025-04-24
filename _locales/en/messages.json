@@ -67,6 +67,10 @@
     "message": "Feedback",
     "description": "Title for the feedback section"
   },
+  "feedbackDescription": {
+    "message": "Your feedback helps make ZenReader better. Found a bug or have a suggestion?",
+    "description": "Description text in the feedback section"
+  },
   "githubIssue": {
     "message": "Submit an issue on GitHub",
     "description": "Text for the GitHub issue button"

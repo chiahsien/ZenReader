@@ -149,7 +149,9 @@ body {
 
 /* Button styles */
 .button {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 12px 20px;
     text-align: center;
     border-radius: 5px;
@@ -157,14 +159,29 @@ body {
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.2s, transform 0.1s;
+    margin: 15px auto 0;
+    width: fit-content;
+    min-width: 200px;
 }
 
 .button:hover {
     transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .button:active {
     transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.button-text {
+    flex: 1;
 }
 
 .github-button {
@@ -185,6 +202,11 @@ body {
 /* RTL support */
 html[dir="rtl"] .button {
     direction: rtl;
+}
+
+html[dir="rtl"] .button-icon {
+    margin-right: 0;
+    margin-left: 8px;
 }
 
 html[dir="rtl"] .feature-icon {
@@ -270,5 +292,15 @@ html[dir="rtl"] .philosophy-block {
 
     .philosophy-quote {
         color: #d0d0d0;
+    }
+
+    .github-button {
+        background-color: #333;
+        color: #f0f0f0;
+        border: 1px solid #555;
+    }
+
+    .github-button:hover {
+        background-color: #444;
     }
 }
