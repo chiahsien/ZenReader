@@ -40,5 +40,16 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "about/about.html",
+        "about/about.css",
+        "about/about.js",
+        "icons/*.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

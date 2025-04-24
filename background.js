@@ -155,6 +155,17 @@ function syncContextMenuWithActiveTab() {
   });
 }
 
+/**
+ * Opens the ZenReader About page in a new tab
+ */
+function openAboutPage() {
+  // Get the URL for the about page
+  const aboutURL = chrome.runtime.getURL('about/about.html');
+
+  // Open the about page in a new tab
+  chrome.tabs.create({ url: aboutURL });
+}
+
 // Set up event listeners when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
   // Create the context menu
