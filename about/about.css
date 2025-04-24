@@ -195,8 +195,57 @@ body {
 
 /* Coffee button container */
 .coffee-button-container {
-    margin: 0 auto;
+    margin: 20px auto;
     text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+/* Custom Buy Me a Coffee button */
+.bmc-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #5F7FFF;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.bmc-button:hover {
+    background-color: #4a69e2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.bmc-button-icon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.bmc-button-text {
+    white-space: nowrap;
+}
+
+/* Support note */
+.support-note {
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+/* Donation section */
+.donation-section {
+    background-color: rgba(95, 127, 255, 0.05);
+    border-radius: 0 0 10px 10px;
 }
 
 /* RTL support */
@@ -220,6 +269,11 @@ html[dir="rtl"] .philosophy-block {
     padding-left: 0;
     padding-right: 15px;
     border-radius: 5px 0 0 5px;
+}
+
+html[dir="rtl"] .bmc-button-icon {
+    margin-right: 0;
+    margin-left: 8px;
 }
 
 /* Responsive design for smaller screens */
@@ -302,5 +356,22 @@ html[dir="rtl"] .philosophy-block {
 
     .github-button:hover {
         background-color: #444;
+    }
+
+    .bmc-button {
+        background-color: #4963ce;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .bmc-button:hover {
+        background-color: #3854c1;
+    }
+
+    .support-note {
+        color: #999;
+    }
+
+    .donation-section {
+        background-color: rgba(95, 127, 255, 0.08);
     }
 }

@@ -79,6 +79,18 @@
     "message": "Support Development",
     "description": "Title for the donation section"
   },
+  "supportDescription": {
+    "message": "If you find ZenReader useful, consider supporting its development. Your support helps keep this project alive and improving!",
+    "description": "Description text in the donation section"
+  },
+  "supportNote": {
+    "message": "Your support is entirely voluntary but greatly appreciated!",
+    "description": "Note text below the donation button"
+  },
+  "buyMeACoffee": {
+    "message": "Buy me a coffee",
+    "description": "Text for Buy Me a Coffee button"
+  },
   "versionLabel": {
     "message": "Version",
     "description": "Label for version information"
