@@ -1,0 +1,172 @@
+/* ZenReader - About Page Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Section styles */
+.section {
+    padding: 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Info section styles */
+.info-section {
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.logo-container {
+    margin-bottom: 15px;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.version {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.developer {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Description styles */
+.description {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.description:last-child {
+    margin-bottom: 0;
+}
+
+/* Button styles */
+.button {
+    display: block;
+    padding: 12px 20px;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+}
+
+.button:active {
+    transform: translateY(1px);
+}
+
+.github-button {
+    background-color: #24292e;
+    color: white;
+}
+
+.github-button:hover {
+    background-color: #2f363d;
+}
+
+.coffee-button {
+    background-color: #ff813f;
+    color: white;
+}
+
+.coffee-button:hover {
+    background-color: #ff9255;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 640px) {
+    .container {
+        margin: 20px;
+        width: auto;
+    }
+
+    .section {
+        padding: 20px;
+    }
+
+    .info-section {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+}
+
+/* System dark mode support (will be expanded later) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #222;
+        color: #e0e0e0;
+    }
+
+    .container {
+        background-color: #333;
+    }
+
+    .section {
+        border-bottom-color: #444;
+    }
+
+    .title,
+    .section-title {
+        color: #f0f0f0;
+    }
+
+    .version,
+    .developer {
+        color: #aaa;
+    }
+
+    .description {
+        color: #ccc;
+    }
+}
