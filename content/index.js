@@ -13,11 +13,12 @@ const zenReaderState = {
   overlayElement: null,
   focusContainer: null,
   exitButton: null,
+  aboutButton: null, // Added about button reference
   shadowRoot: null
 };
 
 // Initialize all modules
-(function() {
+(function () {
   // Initialize style cache - must be done first
   initStyleCache();
 
