@@ -80,10 +80,71 @@ body {
     margin-bottom: 15px;
     font-size: 14px;
     color: #555;
+    line-height: 1.5;
 }
 
 .description:last-child {
     margin-bottom: 0;
+}
+
+/* Feature list styles */
+.feature-list {
+    margin: 20px 0;
+}
+
+.feature-item {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+.feature-icon {
+    flex: 0 0 30px;
+    font-size: 24px;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+.feature-text {
+    flex: 1;
+}
+
+.feature-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: #444;
+}
+
+.feature-description {
+    font-size: 14px;
+    margin: 0;
+    color: #666;
+}
+
+/* Philosophy block styles */
+.philosophy-block {
+    margin-top: 25px;
+    border-left: 3px solid #5F7FFF;
+    padding-left: 15px;
+    background-color: rgba(95, 127, 255, 0.05);
+    padding: 10px 15px;
+    border-radius: 0 5px 5px 0;
+}
+
+.philosophy-quote {
+    font-style: italic;
+    font-size: 16px;
+    color: #444;
+    margin: 0 0 10px 0;
+    padding: 0;
+    border: none;
+    font-weight: 500;
+}
+
+/* Updated intro section */
+.intro-section {
+    padding-bottom: 35px;
 }
 
 /* Button styles */
@@ -126,6 +187,19 @@ html[dir="rtl"] .button {
     direction: rtl;
 }
 
+html[dir="rtl"] .feature-icon {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+html[dir="rtl"] .philosophy-block {
+    border-left: none;
+    border-right: 3px solid #5F7FFF;
+    padding-left: 0;
+    padding-right: 15px;
+    border-radius: 5px 0 0 5px;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 640px) {
     .container {
@@ -140,6 +214,11 @@ html[dir="rtl"] .button {
     .info-section {
         padding-top: 30px;
         padding-bottom: 30px;
+    }
+
+    .feature-icon {
+        flex: 0 0 25px;
+        font-size: 20px;
     }
 }
 
@@ -170,5 +249,26 @@ html[dir="rtl"] .button {
 
     .description {
         color: #ccc;
+    }
+
+    .feature-title {
+        color: #e0e0e0;
+    }
+
+    .feature-description {
+        color: #bbb;
+    }
+
+    .philosophy-block {
+        background-color: rgba(95, 127, 255, 0.1);
+        border-left-color: #6a8aff;
+    }
+
+    html[dir="rtl"] .philosophy-block {
+        border-right-color: #6a8aff;
+    }
+
+    .philosophy-quote {
+        color: #d0d0d0;
     }
 }

@@ -35,6 +35,34 @@
     "message": "This enables you to focus on what matters while still enjoying the website's intended visual experience.",
     "description": "Description of ZenReader's philosophy"
   },
+  "philosophyQuote": {
+    "message": "Focus on what matters without losing the website's intended visual experience.",
+    "description": "Core philosophy quote"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "Original Styling",
+    "description": "Title for original styling feature"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "Preserves website's intended visual experience and design elements.",
+    "description": "Description of original styling feature"
+  },
+  "featureSelectionTitle": {
+    "message": "Precise Selection",
+    "description": "Title for selection feature"
+  },
+  "featureSelectionDesc": {
+    "message": "Select exactly what you want to read, from a paragraph to an entire article.",
+    "description": "Description of selection feature"
+  },
+  "featureAdaptiveTitle": {
+    "message": "Adaptive Display",
+    "description": "Title for adaptive display feature"
+  },
+  "featureAdaptiveDesc": {
+    "message": "Automatically adapts to light and dark modes based on your system preferences.",
+    "description": "Description of adaptive display feature"
+  },
   "feedbackTitle": {
     "message": "Feedback",
     "description": "Title for the feedback section"
