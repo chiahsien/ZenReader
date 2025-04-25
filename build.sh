@@ -32,6 +32,7 @@ REQUIRED_FILES=(
   "_locales"
   "icons"
   "content"
+  "about"
 )
 
 for file in "${REQUIRED_FILES[@]}"; do
@@ -43,7 +44,7 @@ done
 
 # Copy required files to build directory
 echo "Copying files to build directory..."
-cp -r manifest.json background.js styles.css _locales icons content $BUILD_DIR
+cp -r manifest.json background.js styles.css _locales icons content about $BUILD_DIR
 
 # Remove any development or unnecessary files
 echo "Removing development files..."

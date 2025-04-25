@@ -28,6 +28,7 @@ This allows you to enjoy the content creator's design choices while still elimin
 - **Responsive Design**: Adjusts to different screen sizes and orientations
 - **Multilingual Support**: Available in multiple languages
 - **Dark Mode Compatible**: Adapts to system dark mode preferences
+- **About Page**: Access information about the extension, provide feedback, and support development
 
 ## How to Use
 
@@ -42,6 +43,9 @@ This allows you to enjoy the content creator's design choices while still elimin
    - Clicking outside the focus container
    - Clicking the browser toolbar icon again
    - Right-clicking and selecting "Exit Focus Mode"
+5. **Access the About page** by:
+   - Right-clicking the extension icon and selecting "About ZenReader"
+   - Clicking the "?" button in the focus mode toolbar
 
 ## Installation
 
@@ -68,6 +72,10 @@ ZenReader/
 ├── styles.css                  # Global styles for the extension
 ├── icons/                      # Extension icons in various sizes
 ├── _locales/                   # Internationalization files
+├── about/                      # About page files
+│   ├── about.html              # About page HTML structure
+│   ├── about.css               # About page styling
+│   └── about.js                # About page functionality
 └── content/                    # Content scripts for webpage interaction
     ├── index.js                # Main entry point for content scripts
     ├── focusMode.js            # Reading mode implementation
