@@ -92,16 +92,6 @@ async function getExtensionVersion() {
 }
 
 /**
- * Gets developer information
- * @returns {string} - The developer name
- */
-function getDeveloperInfo() {
-    // This could be fetched from a configuration file or other source
-    // For now, we'll use a hardcoded value
-    return 'Nelson Tai';
-}
-
-/**
  * Updates the page with dynamic content like version and developer info
  */
 async function updateDynamicContent() {
@@ -111,12 +101,6 @@ async function updateDynamicContent() {
         if (versionElement) {
             const version = await getExtensionVersion();
             versionElement.textContent = version;
-        }
-
-        // Update developer info
-        const developerElement = document.getElementById('developer');
-        if (developerElement) {
-            developerElement.textContent = getDeveloperInfo();
         }
     } catch (error) {
         console.error('Error updating dynamic content:', error);
