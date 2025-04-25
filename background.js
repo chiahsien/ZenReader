@@ -6,10 +6,11 @@
  * - Context menu creation and management
  * - Communication with content script
  * - Tab state tracking
+ * - About page navigation
  */
 
 // Initialize extension state
-let contextMenuId = null;
+let pageContextMenuId = null;
 
 // Object to track active status for each tab
 let tabStates = {};
@@ -34,44 +35,44 @@ function updateIcon(tabId, active) {
 }
 
 /**
- * Updates the context menu title based on ZenReader's active state
+ * Updates the page context menu title based on ZenReader's active state
  * This is now a more robust function that will work even with potential race conditions
  * @param {boolean} active - Whether ZenReader is currently active on the current tab
  */
-function updateContextMenu(active) {
-  if (contextMenuId) {
+function updatePageContextMenu(active) {
+  if (pageContextMenuId) {
     const title = active ?
       chrome.i18n.getMessage("exitFocusMode") :
       chrome.i18n.getMessage("enterFocusMode");
 
     try {
-      chrome.contextMenus.update(contextMenuId, { title }, () => {
+      chrome.contextMenus.update(pageContextMenuId, { title }, () => {
         // Handle potential error in callback
         if (chrome.runtime.lastError) {
           console.log("Could not update context menu:", chrome.runtime.lastError.message);
 
           // If error is because menu doesn't exist, recreate it
           if (chrome.runtime.lastError.message.includes("not found")) {
-            createContextMenu(active);
+            createPageContextMenu(active);
           }
         }
       });
     } catch (e) {
       console.log("Error updating context menu:", e.message);
       // Attempt to recreate the context menu if there was an error
-      createContextMenu(active);
+      createPageContextMenu(active);
     }
   } else {
     // If menu ID doesn't exist, create the menu
-    createContextMenu(active);
+    createPageContextMenu(active);
   }
 }
 
 /**
- * Creates the context menu item for ZenReader with the appropriate state
+ * Creates the page context menu items for ZenReader with the appropriate state
  * @param {boolean} active - Whether ZenReader is currently active (optional)
  */
-function createContextMenu(active = false) {
+function createPageContextMenu(active = false) {
   // Remove any existing menu items to avoid duplicates
   chrome.contextMenus.removeAll(() => {
     // Create the context menu item with the correct state
@@ -80,20 +81,42 @@ function createContextMenu(active = false) {
       chrome.i18n.getMessage("enterFocusMode");
 
     try {
-      contextMenuId = chrome.contextMenus.create({
+      // Create the main toggle menu item for page context
+      pageContextMenuId = chrome.contextMenus.create({
         id: "zenreader-toggle",
         title: title,
-        contexts: ["all"]
+        contexts: ["page"]
       }, () => {
         // Handle potential error in callback
         if (chrome.runtime.lastError) {
-          console.log("Could not create context menu:", chrome.runtime.lastError.message);
+          console.log("Could not create page context menu:", chrome.runtime.lastError.message);
         }
       });
+
     } catch (e) {
-      console.log("Error creating context menu:", e.message);
+      console.log("Error creating page context menu:", e.message);
     }
   });
+}
+
+/**
+ * Creates the action context menu for the extension toolbar button
+ */
+function createActionContextMenu() {
+  try {
+    // Create the About page menu item for the extension icon context menu
+    chrome.contextMenus.create({
+      id: "zenreader-about",
+      title: chrome.i18n.getMessage("aboutZenReader"),
+      contexts: ["action"]
+    }, () => {
+      if (chrome.runtime.lastError) {
+        console.log("Could not create action context menu item:", chrome.runtime.lastError.message);
+      }
+    });
+  } catch (e) {
+    console.log("Error creating action context menu:", e.message);
+  }
 }
 
 /**
@@ -134,31 +157,46 @@ function setTabState(tabId, active) {
     // Check if this is the active tab
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0 && tabs[0].id === tabId) {
-        // Update context menu immediately if this is the active tab
-        updateContextMenu(active);
+        // Update page context menu immediately if this is the active tab
+        updatePageContextMenu(active);
       }
     });
   }
 }
 
 /**
- * Ensures that the context menu is updated for the active tab
+ * Ensures that the page context menu is updated for the active tab
  * Used when switching tabs or when the state might be uncertain
  */
-function syncContextMenuWithActiveTab() {
+function syncPageContextMenuWithActiveTab() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs.length > 0) {
       const activeTabId = tabs[0].id;
       const isActive = getTabState(activeTabId);
-      updateContextMenu(isActive);
+      updatePageContextMenu(isActive);
     }
   });
 }
 
+/**
+ * Opens the ZenReader About page in a new tab
+ */
+function openAboutPage() {
+  // Get the URL for the about page
+  const aboutURL = chrome.runtime.getURL('about/about.html');
+
+  // Open the about page in a new tab
+  chrome.tabs.create({ url: aboutURL });
+}
+
 // Set up event listeners when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
-  // Create the context menu
-  createContextMenu();
+  // Create the page context menu
+  createPageContextMenu();
+
+  // Create the action context menu for the extension toolbar button
+  createActionContextMenu();
+
   console.log("ZenReader extension installed");
 });
 
@@ -171,6 +209,8 @@ chrome.action.onClicked.addListener((tab) => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "zenreader-toggle") {
     activateZenReader(tab.id);
+  } else if (info.menuItemId === "zenreader-about") {
+    openAboutPage();
   }
 });
 
@@ -184,8 +224,8 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 // Handle tab activation (when user switches tabs)
 chrome.tabs.onActivated.addListener((activeInfo) => {
-  // Sync context menu with the newly activated tab's state
-  syncContextMenuWithActiveTab();
+  // Sync page context menu with the newly activated tab's state
+  syncPageContextMenuWithActiveTab();
 });
 
 // Handle tab updates to ensure icon is correct when navigating
@@ -195,12 +235,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     setTabState(tabId, false);
   }
 
-  // If the tab has finished loading, update context menu if it's the active tab
+  // If the tab has finished loading, update page context menu if it's the active tab
   if (changeInfo.status === 'complete') {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0 && tabs[0].id === tabId) {
         // Double-check the tab state here
-        syncContextMenuWithActiveTab();
+        syncPageContextMenuWithActiveTab();
       }
     });
   }
@@ -221,14 +261,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } catch (e) {
       console.log("Error sending response:", e.message);
     }
+  } else if (message.action === "openAboutPage") {
+    // Handle request to open about page
+    openAboutPage();
+    sendResponse({ success: true });
   }
 
   // Return false since we're not using sendResponse asynchronously
   return false;
 });
 
-// Set up a periodic check to ensure context menu stays in sync
+// Set up a periodic check to ensure page context menu stays in sync
 // This helps catch any edge cases we might have missed
 setInterval(() => {
-  syncContextMenuWithActiveTab();
+  syncPageContextMenuWithActiveTab();
 }, 5000); // Every 5 seconds

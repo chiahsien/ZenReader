@@ -25,7 +25,7 @@
   - [X] Implement content script for webpage interaction
   - [X] Build manual selection mode logic
     - [X] Toolbar icon activation (FR1)
-    - ~~ Context menu activation (FR2)~~
+    - [X] Context menu activation (FR2)
     - [X] Selection mode visual feedback (FR4)
     - [X] Element selection handler (FR5)
     - [X] ESC key for cancelling selection (FR6)
@@ -54,7 +54,7 @@
   - [ ] Write detailed description
   - [ ] Prepare privacy policy
 - [ ] Build and package extension
-  - [ ] Create production-ready zip file
+  - [X] Create production-ready zip file
 - [ ] Submit to Chrome Web Store
   - [ ] Upload package
   - [ ] Fill in store listing details

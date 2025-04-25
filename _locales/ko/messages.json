@@ -14,5 +14,89 @@
   "enterFocusMode": {
     "message": "집중 모드 시작",
     "description": "집중 모드를 시작하는 컨텍스트 메뉴 항목 텍스트"
+  },
+  "aboutZenReader": {
+    "message": "ZenReader 소개",
+    "description": "정보 페이지 제목 및 컨텍스트 메뉴 항목 텍스트"
+  },
+  "aboutIntroTitle": {
+    "message": "ZenReader 소개",
+    "description": "정보 페이지의 소개 섹션 제목"
+  },
+  "aboutDescription": {
+    "message": "ZenReader는 방해 없는 읽기 경험을 제공하여 중요한 콘텐츠에 집중할 수 있게 합니다.",
+    "description": "ZenReader 기능 설명"
+  },
+  "aboutDifference": {
+    "message": "다른 리더 모드와 달리, ZenReader는 방해 요소를 제거하면서도 웹 콘텐츠의 원래 스타일을 유지합니다.",
+    "description": "ZenReader와 다른 리더 모드의 차이점 설명"
+  },
+  "aboutPhilosophy": {
+    "message": "이를 통해 웹사이트의 의도된 시각적 경험을 잃지 않으면서 중요한 내용에 집중할 수 있습니다.",
+    "description": "ZenReader 철학 설명"
+  },
+  "philosophyQuote": {
+    "message": "웹사이트의 의도된 시각적 경험을 잃지 않으면서 중요한 내용에 집중하세요.",
+    "description": "핵심 철학 인용구"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "원본 스타일",
+    "description": "원본 스타일 기능 제목"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "웹사이트의 의도된 시각적 경험과 디자인 요소를 유지합니다.",
+    "description": "원본 스타일 기능 설명"
+  },
+  "featureSelectionTitle": {
+    "message": "정확한 선택",
+    "description": "선택 기능 제목"
+  },
+  "featureSelectionDesc": {
+    "message": "단락에서 전체 기사까지 읽고 싶은 내용을 정확히 선택하세요.",
+    "description": "선택 기능 설명"
+  },
+  "featureAdaptiveTitle": {
+    "message": "적응형 디스플레이",
+    "description": "적응형 디스플레이 기능 제목"
+  },
+  "featureAdaptiveDesc": {
+    "message": "시스템 환경 설정에 따라 라이트 모드 또는 다크 모드에 자동으로 적응합니다.",
+    "description": "적응형 디스플레이 기능 설명"
+  },
+  "feedbackTitle": {
+    "message": "피드백",
+    "description": "피드백 섹션 제목"
+  },
+  "feedbackDescription": {
+    "message": "여러분의 피드백은 ZenReader를 개선하는 데 도움이 됩니다. 버그를 발견하셨거나 제안이 있으신가요?",
+    "description": "피드백 섹션 설명 텍스트"
+  },
+  "githubIssue": {
+    "message": "GitHub에 이슈 제출",
+    "description": "GitHub 이슈 버튼 텍스트"
+  },
+  "supportTitle": {
+    "message": "개발 지원",
+    "description": "기부 섹션 제목"
+  },
+  "supportDescription": {
+    "message": "ZenReader가 유용하다고 생각하시면, 개발을 지원해 주세요. 여러분의 지원은 이 프로젝트를 유지하고 개선하는 데 도움이 됩니다!",
+    "description": "기부 섹션 설명 텍스트"
+  },
+  "supportNote": {
+    "message": "여러분의 지원은 전적으로 자발적이지만, 매우 감사히 생각합니다!",
+    "description": "기부 버튼 아래 참고 텍스트"
+  },
+  "buyMeACoffee": {
+    "message": "커피 한 잔 사주기",
+    "description": "'Buy Me a Coffee' 버튼 텍스트"
+  },
+  "versionLabel": {
+    "message": "버전",
+    "description": "버전 정보 레이블"
+  },
+  "developedBy": {
+    "message": "개발자",
+    "description": "개발자 정보 레이블"
   }
 }
