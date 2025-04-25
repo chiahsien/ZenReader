@@ -69,46 +69,12 @@
     font-size: 14px !important;
     font-weight: 500 !important;
     color: #333 !important;
-    max-width: 80% !important;
+    max-width: 60% !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
     text-align: center !important;
-}
-
-/* Toolbar buttons container - for grouping buttons on the right */
-.zenreader-toolbar-buttons {
-    display: flex !important;
-    gap: 5px !important;
-    align-items: center !important;
-}
-
-/* Common styles for toolbar buttons */
-.zenreader-toolbar-button {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    min-height: 30px !important;
-    max-width: 30px !important;
-    max-height: 30px !important;
-    border-radius: 50% !important;
-    background-color: #f0f0f0 !important;
-    border: none !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    line-height: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: background-color 0.2s !important;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-}
-
-.zenreader-toolbar-button:hover {
-    background-color: #e0e0e0 !important;
+    flex: 1 !important;
 }
 
 /* About button specific styles */
@@ -134,13 +100,14 @@
     margin: 0 !important;
     overflow: hidden !important;
     font-weight: bold !important;
+    margin-right: 10px !important;
 }
 
 .zenreader-about-button:hover {
     background-color: #e0e0e0 !important;
 }
 
-/* Exit button - now positioned within toolbar buttons container */
+/* Exit button - positioned on the right side */
 .zenreader-exit-button {
     width: 30px !important;
     height: 30px !important;
@@ -162,6 +129,7 @@
     padding: 0 !important;
     margin: 0 !important;
     overflow: hidden !important;
+    margin-left: 10px !important;
 }
 
 .zenreader-exit-button:hover {
@@ -235,8 +203,14 @@ html[dir="rtl"] .zenreader-toolbar {
     direction: rtl !important;
 }
 
-html[dir="rtl"] .zenreader-toolbar-buttons {
-    flex-direction: row-reverse !important;
+html[dir="rtl"] .zenreader-about-button {
+    margin-right: 0 !important;
+    margin-left: 10px !important;
+}
+
+html[dir="rtl"] .zenreader-exit-button {
+    margin-left: 0 !important;
+    margin-right: 10px !important;
 }
 
 /* Ensure cloned content inherits RTL direction from parent document */
