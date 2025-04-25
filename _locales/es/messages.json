@@ -14,5 +14,89 @@
   "enterFocusMode": {
     "message": "Entrar en modo enfoque",
     "description": "Texto del elemento del menú contextual para entrar en modo enfoque"
+  },
+  "aboutZenReader": {
+    "message": "Acerca de ZenReader",
+    "description": "Texto para el título de la página y el elemento del menú contextual de la página de información"
+  },
+  "aboutIntroTitle": {
+    "message": "Acerca de ZenReader",
+    "description": "Título para la sección de introducción en la página de información"
+  },
+  "aboutDescription": {
+    "message": "ZenReader proporciona una experiencia de lectura sin distracciones, permitiéndote concentrarte en el contenido importante.",
+    "description": "Descripción de la funcionalidad de ZenReader"
+  },
+  "aboutDifference": {
+    "message": "A diferencia de otros modos de lectura, ZenReader preserva el estilo original del contenido web mientras elimina las distracciones.",
+    "description": "Descripción de cómo ZenReader difiere de otros modos de lectura"
+  },
+  "aboutPhilosophy": {
+    "message": "Esto te permite concentrarte en lo que importa mientras sigues disfrutando de la experiencia visual intencionada del sitio web.",
+    "description": "Descripción de la filosofía de ZenReader"
+  },
+  "philosophyQuote": {
+    "message": "Concéntrate en lo importante sin perder la experiencia visual intencionada del sitio web.",
+    "description": "Cita de la filosofía central"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "Estilo Original",
+    "description": "Título para la característica de estilo original"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "Preserva la experiencia visual intencionada y los elementos de diseño del sitio web.",
+    "description": "Descripción de la característica de estilo original"
+  },
+  "featureSelectionTitle": {
+    "message": "Selección Precisa",
+    "description": "Título para la característica de selección"
+  },
+  "featureSelectionDesc": {
+    "message": "Selecciona exactamente lo que quieres leer, desde un párrafo hasta un artículo completo.",
+    "description": "Descripción de la característica de selección"
+  },
+  "featureAdaptiveTitle": {
+    "message": "Visualización Adaptativa",
+    "description": "Título para la característica de visualización adaptativa"
+  },
+  "featureAdaptiveDesc": {
+    "message": "Se adapta automáticamente a los modos claro u oscuro según tus preferencias del sistema.",
+    "description": "Descripción de la característica de visualización adaptativa"
+  },
+  "feedbackTitle": {
+    "message": "Opiniones",
+    "description": "Título para la sección de opiniones"
+  },
+  "feedbackDescription": {
+    "message": "Tus comentarios ayudan a mejorar ZenReader. ¿Has encontrado un error o tienes alguna sugerencia?",
+    "description": "Texto descriptivo en la sección de opiniones"
+  },
+  "githubIssue": {
+    "message": "Enviar un problema en GitHub",
+    "description": "Texto para el botón de problema de GitHub"
+  },
+  "supportTitle": {
+    "message": "Apoyar el Desarrollo",
+    "description": "Título para la sección de donaciones"
+  },
+  "supportDescription": {
+    "message": "Si encuentras útil ZenReader, considera apoyar su desarrollo. ¡Tu apoyo ayuda a mantener vivo y mejorando este proyecto!",
+    "description": "Texto descriptivo en la sección de donaciones"
+  },
+  "supportNote": {
+    "message": "¡Tu apoyo es completamente voluntario pero muy apreciado!",
+    "description": "Texto de nota debajo del botón de donación"
+  },
+  "buyMeACoffee": {
+    "message": "Invítame a un café",
+    "description": "Texto para el botón 'Buy Me a Coffee'"
+  },
+  "versionLabel": {
+    "message": "Versión",
+    "description": "Etiqueta para la información de versión"
+  },
+  "developedBy": {
+    "message": "Desarrollado por",
+    "description": "Etiqueta para la información del desarrollador"
   }
 }

@@ -14,5 +14,89 @@
   "enterFocusMode": {
     "message": "進入專注模式",
     "description": "進入專注模式右鍵選單文字"
+  },
+  "aboutZenReader": {
+    "message": "關於 ZenReader",
+    "description": "關於頁面標題和右鍵選單項目文字"
+  },
+  "aboutIntroTitle": {
+    "message": "關於 ZenReader",
+    "description": "關於頁面介紹部分標題"
+  },
+  "aboutDescription": {
+    "message": "ZenReader 提供無干擾的閱讀體驗，讓您專注於重要內容。",
+    "description": "ZenReader 功能描述"
+  },
+  "aboutDifference": {
+    "message": "與其他閱讀模式不同，ZenReader 在移除干擾的同時保留網頁內容的原始樣式。",
+    "description": "ZenReader 與其他閱讀模式的差異描述"
+  },
+  "aboutPhilosophy": {
+    "message": "這使您能夠專注於重要內容，同時保持網站原有的視覺體驗。",
+    "description": "ZenReader 理念描述"
+  },
+  "philosophyQuote": {
+    "message": "專注於重要內容，同時不失去網站原有的視覺體驗。",
+    "description": "核心理念引述"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "原始樣式",
+    "description": "原始樣式功能標題"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "保留網站原有的視覺體驗和設計元素。",
+    "description": "原始樣式功能描述"
+  },
+  "featureSelectionTitle": {
+    "message": "精確選擇",
+    "description": "選擇功能標題"
+  },
+  "featureSelectionDesc": {
+    "message": "精確選擇您想閱讀的內容，從單一段落到整篇文章。",
+    "description": "選擇功能描述"
+  },
+  "featureAdaptiveTitle": {
+    "message": "自適應顯示",
+    "description": "自適應顯示功能標題"
+  },
+  "featureAdaptiveDesc": {
+    "message": "根據系統偏好自動適應明暗模式。",
+    "description": "自適應顯示功能描述"
+  },
+  "feedbackTitle": {
+    "message": "意見回饋",
+    "description": "回饋部分標題"
+  },
+  "feedbackDescription": {
+    "message": "您的回饋有助於 ZenReader 變得更好。發現錯誤或有任何建議？",
+    "description": "回饋部分描述文字"
+  },
+  "githubIssue": {
+    "message": "到 GitHub 提交問題",
+    "description": "GitHub 問題按鈕文字"
+  },
+  "supportTitle": {
+    "message": "支持開發",
+    "description": "贊助部分標題"
+  },
+  "supportDescription": {
+    "message": "如果 ZenReader 有幫到您，請考慮支持開發。您的支持有助於維持這個專案的持續改進！",
+    "description": "贊助部分描述文字"
+  },
+  "supportNote": {
+    "message": "支持完全是自願的，非常感謝您！",
+    "description": "贊助按鈕下方的備註文字"
+  },
+  "buyMeACoffee": {
+    "message": "請我喝杯咖啡",
+    "description": "Buy Me a Coffee 按鈕文字"
+  },
+  "versionLabel": {
+    "message": "版本",
+    "description": "版本信息標籤"
+  },
+  "developedBy": {
+    "message": "開發者",
+    "description": "開發者信息標籤"
   }
 }
