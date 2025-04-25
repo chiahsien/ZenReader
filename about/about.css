@@ -279,26 +279,84 @@ html[dir="rtl"] .bmc-button-icon {
 /* Responsive design for smaller screens */
 @media (max-width: 640px) {
     .container {
-        margin: 20px;
+        margin: 15px;
         width: auto;
+        max-width: 100%;
+        border-radius: 8px;
     }
 
     .section {
-        padding: 20px;
+        padding: 15px;
     }
 
     .info-section {
-        padding-top: 30px;
-        padding-bottom: 30px;
+        padding-top: 25px;
+        padding-bottom: 25px;
+    }
+
+    .logo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .title {
+        font-size: 22px;
     }
 
     .feature-icon {
         flex: 0 0 25px;
         font-size: 20px;
     }
+
+    .feature-title {
+        font-size: 15px;
+    }
+
+    .feature-description {
+        font-size: 13px;
+    }
+
+    .description {
+        font-size: 13px;
+    }
+
+    .button {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .bmc-button {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
 }
 
-/* System dark mode support (will be expanded later) */
+/* Very small screens */
+@media (max-width: 320px) {
+    .container {
+        margin: 10px;
+    }
+
+    .section {
+        padding: 12px;
+    }
+
+    .philosophy-block {
+        padding: 8px 12px;
+    }
+
+    .button-icon {
+        margin-right: 5px;
+    }
+
+    html[dir="rtl"] .button-icon {
+        margin-left: 5px;
+        margin-right: 0;
+    }
+}
+
+/* Dark mode support enhancement */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #222;
