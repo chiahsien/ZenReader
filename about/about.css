@@ -193,14 +193,6 @@ body {
     background-color: #2f363d;
 }
 
-/* Coffee button container */
-.coffee-button-container {
-    margin: 20px auto;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-}
-
 /* Custom Buy Me a Coffee button */
 .bmc-button {
     display: inline-flex;
@@ -235,17 +227,49 @@ body {
 
 /* Support note */
 .support-note {
-    text-align: center;
     font-size: 13px;
     color: #777;
-    margin-top: 15px;
+    margin-top: 10px;
     font-style: italic;
+    text-align: left;
 }
 
 /* Donation section */
 .donation-section {
     background-color: rgba(95, 127, 255, 0.05);
     border-radius: 0 0 10px 10px;
+}
+
+/* Shared styles for the feedback and donation sections */
+.feedback-section,
+.donation-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Text container for both sections */
+.section-text-container {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Button container for both sections */
+.section-button-container {
+    display: flex;
+    justify-content: flex-end;
+    min-width: 200px;
+}
+
+/* Ensure buttons maintain a good size */
+.github-button,
+.bmc-button {
+    min-width: 200px;
+    max-width: 220px;
+    margin: 0;
 }
 
 /* RTL support */
@@ -330,6 +354,28 @@ html[dir="rtl"] .bmc-button-icon {
         padding: 8px 15px;
         font-size: 13px;
     }
+
+    .feedback-section,
+    .donation-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .section-button-container {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .github-button,
+    .bmc-button {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .support-note {
+        text-align: center;
+        margin-top: 5px;
+    }
 }
 
 /* Very small screens */
@@ -356,7 +402,7 @@ html[dir="rtl"] .bmc-button-icon {
     }
 }
 
-/* Dark mode support enhancement */
+/* System dark mode support */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #222;
