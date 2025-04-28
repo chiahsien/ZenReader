@@ -136,6 +136,10 @@ Key technical features:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Privacy Policies
+
+See the [Privacy Policies](PrivacyPolicies.md) file for details.
+
 ## Contributing
 
 We welcome contributions! Please feel free to submit issues or pull requests.
