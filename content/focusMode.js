@@ -135,53 +135,28 @@ function createFocusContainer() {
   const toolbar = document.createElement('div');
   toolbar.className = 'zenreader-toolbar';
 
-  // Apply toolbar styles based on dark/light theme
-  if (colorSettings.isDarkTheme) {
-    toolbar.style.backgroundColor = adjustColorBrightness(colorSettings.bgColor, 15);
-    toolbar.style.borderBottomColor = adjustColorBrightness(colorSettings.bgColor, 30);
-  } else {
-    toolbar.style.backgroundColor = adjustColorBrightness(colorSettings.bgColor, -10);
-    toolbar.style.borderBottomColor = adjustColorBrightness(colorSettings.bgColor, -20);
-  }
+  // Create title element in the toolbar
+  const titleElement = document.createElement('div');
+  titleElement.className = 'zenreader-title';
+  titleElement.textContent = document.title || 'ZenReader';
 
-  // Create About button in the toolbar (now on the left)
+  // Create About button
   zenReaderState.aboutButton = document.createElement('button');
   zenReaderState.aboutButton.className = 'zenreader-about-button';
   zenReaderState.aboutButton.title = chrome.i18n?.getMessage("aboutZenReader") || "About ZenReader";
-  zenReaderState.aboutButton.innerHTML = '?'; // Using question mark as the about button icon
+  zenReaderState.aboutButton.innerHTML = '?';
   zenReaderState.aboutButton.addEventListener('click', openAboutPage);
 
-  // Style about button based on theme
-  zenReaderState.aboutButton.style.backgroundColor = colorSettings.isDarkTheme ? '#555555' : '#f0f0f0';
-  zenReaderState.aboutButton.style.color = colorSettings.isDarkTheme ? '#ffffff' : '#333333';
-
-  // Add About button to the left side of the toolbar
-  toolbar.appendChild(zenReaderState.aboutButton);
-
-  // Create title element in the toolbar (in the middle)
-  const titleElement = document.createElement('div');
-  titleElement.className = 'zenreader-title';
-  titleElement.textContent = document.title;
-  titleElement.title = document.title; // Add tooltip for long titles
-
-  // Set title color for contrast with toolbar
-  titleElement.style.color = colorSettings.isDarkTheme ? '#f0f0f0' : '#333333';
-
-  // Add title to the toolbar (in the middle)
-  toolbar.appendChild(titleElement);
-
-  // Create exit button in the toolbar (now on the right)
+  // Create exit button
   zenReaderState.exitButton = document.createElement('button');
   zenReaderState.exitButton.className = 'zenreader-exit-button';
-  zenReaderState.exitButton.textContent = 'X';
+  zenReaderState.exitButton.innerHTML = '✕';
   zenReaderState.exitButton.title = chrome.i18n?.getMessage("exitFocusMode") || "Exit Focus Mode";
   zenReaderState.exitButton.addEventListener('click', exitFocusMode);
 
-  // Style exit button based on theme
-  zenReaderState.exitButton.style.backgroundColor = colorSettings.isDarkTheme ? '#555555' : '#f0f0f0';
-  zenReaderState.exitButton.style.color = colorSettings.isDarkTheme ? '#ffffff' : '#333333';
-
-  // Add exit button to the right side of the toolbar
+  // Add components to toolbar
+  toolbar.appendChild(zenReaderState.aboutButton);
+  toolbar.appendChild(titleElement);
   toolbar.appendChild(zenReaderState.exitButton);
 
   // Add toolbar to focus container
