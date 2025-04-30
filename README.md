@@ -51,7 +51,7 @@ This allows you to enjoy the content creator's design choices while still elimin
 
 ### From Chrome Web Store
 
-_(Coming soon)_
+[ZenReader - Chrome Web Store](https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp)
 
 ### Manual Installation (Developer Mode)
 
