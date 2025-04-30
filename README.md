@@ -4,7 +4,7 @@
 
 ZenReader is a Chrome extension designed to provide a distraction-free reading experience while preserving the original styling of web content. It allows users to focus on specific sections of a webpage by creating an overlay that highlights only the content they want to read.
 
-![screenshot](screenshots/1.png)
+![screenshot](assets/screenshots/1.png)
 
 <a href="https://www.buymeacoffee.com/chiahsien"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=chiahsien&button_colour=5F7FFF&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>
 
@@ -51,7 +51,7 @@ This allows you to enjoy the content creator's design choices while still elimin
 
 ### From Chrome Web Store
 
-[ZenReader - Chrome Web Store](https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp)
+<a href="https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp?ref=github" target="_blank"><img src="assets/chrome_web_store_download_button.png" width="300"></a>
 
 ### Manual Installation (Developer Mode)
 
