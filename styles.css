@@ -69,7 +69,7 @@
     font-size: 16px !important;
     font-weight: bold !important;
     color: #000000 !important;
-    max-width: 60% !important;
+    max-width: 85% !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
@@ -86,7 +86,7 @@
     max-width: 30px !important;
     max-height: 30px !important;
     border-radius: 50% !important;
-    background-color: transparent !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
     border: none !important;
     cursor: pointer !important;
     font-size: 16px !important;
@@ -99,12 +99,7 @@
     padding: 0 !important;
     margin: 0 !important;
     overflow: hidden !important;
-    font-weight: bold !important;
     margin-right: 10px !important;
-}
-
-.zenreader-about-button:hover {
-    background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Exit button - positioned on the right side */
@@ -116,7 +111,7 @@
     max-width: 30px !important;
     max-height: 30px !important;
     border-radius: 50% !important;
-    background-color: transparent !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
     border: none !important;
     cursor: pointer !important;
     font-size: 16px !important;
@@ -130,10 +125,6 @@
     margin: 0 !important;
     overflow: hidden !important;
     margin-left: 10px !important;
-}
-
-.zenreader-exit-button:hover {
-    background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Content wrapper - scrollable container for the actual content */
