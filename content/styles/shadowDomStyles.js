@@ -2,20 +2,24 @@
  * ZenReader - Shadow DOM Styles Module
  *
  * This script handles creating and applying styles to the Shadow DOM used
- * for the focus mode content.
+ * for the focus mode content. Supports two-phase loading: same-origin styles
+ * are injected synchronously, cross-origin sheets are fetched asynchronously
+ * via the background service worker.
  */
 
 /**
- * Adds styles to the shadow DOM to maintain original content styling
+ * Adds styles to the shadow DOM to maintain original content styling.
+ * Phase 1 (sync): base styles, same-origin sheets, inline styles, CSS custom properties.
+ * Phase 2 (async): cross-origin sheets fetched via background, @font-face recovery,
+ * CSS custom property update from fetched sheets.
  * @param {ShadowRoot} shadow - The shadow root to add styles to
  * @param {Object} colors - The color settings determined for the page
  * @param {Boolean} isMainContent - Whether this is likely main content
+ * @param {Function} onCrossOriginComplete - Callback when async fetches finish (optional)
  */
-function addStylesToShadowDOM(shadow, colors, isMainContent) {
-  // Create style element for base styles
-  const baseStyle = document.createElement('style');
+function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComplete) {
+  var baseStyle = document.createElement('style');
 
-  // Default styles
   baseStyle.textContent = `
     .shadow-container {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -26,13 +30,11 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
       overflow-x: auto;
     }
 
-    /* First child element - remove horizontal margins/paddings and set vertical paddings */
     .shadow-container > *:first-child {
       margin: 0 !important;
       padding: 0 !important;
     }
 
-    /* Basic element styles */
     p, div, span, h1, h2, h3, h4, h5, h6 {
       margin-bottom: 1em;
     }
@@ -69,7 +71,6 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
       white-space: pre-wrap;
     }
 
-    /* List spacing */
     ul, ol {
       padding-left: 40px;
       margin: 1em 0;
@@ -79,7 +80,6 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
       margin-bottom: 0.5em;
     }
 
-    /* Headings */
     h1, h2, h3, h4, h5, h6 {
       font-weight: bold;
       line-height: 1.2;
@@ -94,7 +94,6 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
     h5 { font-size: 1.1em; }
     h6 { font-size: 1em; }
 
-    /* Block quotes */
     blockquote {
       border-left: 4px solid ${colors.isDarkTheme ? '#555' : '#ddd'};
       padding-left: 1em;
@@ -103,13 +102,11 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
       font-style: italic;
     }
 
-    /* Fix for common width issues */
     * {
       max-width: 100%;
       box-sizing: border-box;
     }
 
-    /* Special styles for article content */
     ${isMainContent ? `
       .shadow-container > * {
         width: 100% !important;
@@ -121,7 +118,6 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
         box-sizing: border-box !important;
       }
 
-      /* Special styles for text containers in articles */
       .shadow-container > div,
       .shadow-container > section,
       .shadow-container > article {
@@ -131,54 +127,306 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
   `;
   shadow.appendChild(baseStyle);
 
-  // Try to copy stylesheets from the original page with an enhanced approach
+  // Phase 1: inject same-origin custom properties
+  var customProps = collectCSSCustomProperties();
+  injectCSSCustomProperties(shadow, customProps);
+
+  var crossOriginURLs = [];
+  var sameOriginFontFaces = [];
+
   try {
-    // Get all stylesheets from the document
-    const styleSheets = Array.from(document.styleSheets);
+    var styleSheets = Array.from(document.styleSheets);
 
-    // Process each stylesheet
-    styleSheets.forEach(sheet => {
+    styleSheets.forEach(function (sheet) {
       try {
-        // Skip cross-origin stylesheets
-        if (!sheet.cssRules) return;
+        if (!sheet.cssRules) {
+          if (sheet.href) {
+            crossOriginURLs.push(sheet.href);
+          }
+          return;
+        }
 
-        // Create a new style element for each stylesheet
-        const style = document.createElement('style');
+        var style = document.createElement('style');
 
-        // Get all the CSS rules
-        Array.from(sheet.cssRules).forEach(rule => {
+        Array.from(sheet.cssRules).forEach(function (rule) {
           try {
-            // Add each rule to our style element
             style.textContent += rule.cssText + '\n';
+
+            if (rule instanceof CSSFontFaceRule) {
+              sameOriginFontFaces.push(rule.cssText);
+            }
           } catch (ruleError) {
-            // Skip individual rules that cause errors
             console.debug('Could not access rule:', ruleError);
           }
         });
 
-        // Add the style to the shadow DOM
         shadow.appendChild(style);
       } catch (sheetError) {
-        // Skip stylesheets that cause errors (likely cross-origin)
+        if (sheet.href) {
+          crossOriginURLs.push(sheet.href);
+        }
         console.debug('Could not access stylesheet:', sheetError);
       }
     });
 
-    // Copy any inline styles
-    const inlineStyles = document.querySelectorAll('style');
-    inlineStyles.forEach(inlineStyle => {
-      const style = document.createElement('style');
+    var inlineStyles = document.querySelectorAll('style');
+    inlineStyles.forEach(function (inlineStyle) {
+      var style = document.createElement('style');
       style.textContent = inlineStyle.textContent;
       shadow.appendChild(style);
     });
 
-    // Add special handling for common dynamic style changes
-    const specialStylesElement = document.createElement('style');
+    var specialStylesElement = document.createElement('style');
     specialStylesElement.textContent = createSpecialCssRules(colors);
     shadow.appendChild(specialStylesElement);
 
   } catch (e) {
     console.error('Error copying styles to shadow DOM:', e);
+  }
+
+  // Inject same-origin @font-face rules into shadow and document head
+  if (sameOriginFontFaces.length > 0) {
+    injectFontFaces(shadow, sameOriginFontFaces);
+  }
+
+  // Phase 2: fetch cross-origin stylesheets asynchronously
+  if (crossOriginURLs.length > 0) {
+    fetchCrossOriginSheets(shadow, crossOriginURLs, function (fetchedCSSTexts) {
+      var updatedProps = collectCSSCustomProperties();
+      injectCSSCustomProperties(shadow, updatedProps);
+
+      var fetchedFontFaces = [];
+      for (var i = 0; i < fetchedCSSTexts.length; i++) {
+        var extracted = extractFontFaceRules(fetchedCSSTexts[i]);
+        for (var j = 0; j < extracted.length; j++) {
+          fetchedFontFaces.push(extracted[j]);
+        }
+      }
+      if (fetchedFontFaces.length > 0) {
+        injectFontFaces(shadow, fetchedFontFaces);
+      }
+
+      if (onCrossOriginComplete) {
+        onCrossOriginComplete(fetchedCSSTexts);
+      }
+    });
+  } else {
+    if (onCrossOriginComplete) {
+      onCrossOriginComplete([]);
+    }
+  }
+}
+
+/**
+ * Fetches an array of cross-origin stylesheet URLs via the background service worker
+ * and injects the results into the shadow DOM. Uses a 3-second per-sheet timeout.
+ * @param {ShadowRoot} shadow - The shadow root to inject fetched CSS into
+ * @param {Array} urls - Array of cross-origin stylesheet URLs
+ * @param {Function} callback - Called with array of successfully fetched CSS text strings
+ */
+function fetchCrossOriginSheets(shadow, urls, callback) {
+  var remaining = urls.length;
+  var fetchedCSSTexts = [];
+
+  if (remaining === 0) {
+    callback(fetchedCSSTexts);
+    return;
+  }
+
+  for (var i = 0; i < urls.length; i++) {
+    fetchSingleCrossOriginSheet(shadow, urls[i], function (cssText) {
+      if (cssText) {
+        fetchedCSSTexts.push(cssText);
+      }
+      remaining--;
+      if (remaining === 0) {
+        callback(fetchedCSSTexts);
+      }
+    });
+  }
+}
+
+/**
+ * Fetches a single cross-origin stylesheet via the background service worker
+ * and injects it into the shadow DOM. Falls back to a <link> element on failure.
+ * @param {ShadowRoot} shadow - The shadow root to inject into
+ * @param {String} href - The URL of the stylesheet
+ * @param {Function} done - Callback with cssText on success, null on failure
+ */
+function fetchSingleCrossOriginSheet(shadow, href, done) {
+  try {
+    chrome.runtime.sendMessage({ action: 'fetchCSS', url: href }, function (response) {
+      if (chrome.runtime.lastError) {
+        console.debug('fetchCSS message error:', chrome.runtime.lastError.message);
+        injectLinkFallback(shadow, href);
+        done(null);
+        return;
+      }
+
+      if (response && response.success && response.cssText) {
+        injectCSSTextIntoShadow(shadow, response.cssText);
+        done(response.cssText);
+      } else {
+        injectLinkFallback(shadow, href);
+        done(null);
+      }
+    });
+  } catch (e) {
+    console.debug('Error fetching cross-origin sheet:', e);
+    injectLinkFallback(shadow, href);
+    done(null);
+  }
+}
+
+/**
+ * Injects raw CSS text as a <style> element into a shadow root
+ * @param {ShadowRoot} shadow - The shadow root
+ * @param {String} cssText - The CSS text to inject
+ */
+function injectCSSTextIntoShadow(shadow, cssText) {
+  var style = document.createElement('style');
+  style.textContent = cssText;
+  shadow.appendChild(style);
+}
+
+/**
+ * Injects a <link> element as a fallback when CSS text fetch fails
+ * @param {ShadowRoot} shadow - The shadow root
+ * @param {String} href - The stylesheet URL
+ */
+function injectLinkFallback(shadow, href) {
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  shadow.appendChild(link);
+}
+
+/**
+ * Collects CSS custom properties (--variables) from :root, documentElement, and body
+ * @returns {Object} - Map of property names to their computed values
+ */
+function collectCSSCustomProperties() {
+  var properties = {};
+
+  var targets = [document.documentElement];
+  if (document.body) {
+    targets.push(document.body);
+  }
+
+  for (var t = 0; t < targets.length; t++) {
+    try {
+      var sheets = Array.from(document.styleSheets);
+      for (var s = 0; s < sheets.length; s++) {
+        try {
+          var rules = sheets[s].cssRules;
+          if (!rules) continue;
+
+          for (var r = 0; r < rules.length; r++) {
+            var rule = rules[r];
+            if (rule.type !== CSSRule.STYLE_RULE) continue;
+
+            var selector = rule.selectorText || '';
+            if (selector === ':root' || selector === 'html' || selector === 'body' ||
+                selector === ':root, html' || selector === 'html, :root') {
+              for (var p = 0; p < rule.style.length; p++) {
+                var propName = rule.style[p];
+                if (propName.indexOf('--') === 0) {
+                  properties[propName] = rule.style.getPropertyValue(propName).trim();
+                }
+              }
+            }
+          }
+        } catch (sheetErr) {
+          // cross-origin sheet, skip
+        }
+      }
+    } catch (e) {
+      console.debug('Error collecting custom properties from sheets:', e);
+    }
+  }
+
+  return properties;
+}
+
+/**
+ * Injects CSS custom properties into the shadow DOM via a :host {} style block.
+ * Removes any previously injected custom property block before creating a new one.
+ * @param {ShadowRoot} shadow - The shadow root
+ * @param {Object} properties - Map of property names to values
+ */
+function injectCSSCustomProperties(shadow, properties) {
+  var existing = shadow.querySelector('style[data-zenreader-custom-props]');
+  if (existing) {
+    existing.parentNode.removeChild(existing);
+  }
+
+  var propNames = Object.keys(properties);
+  if (propNames.length === 0) return;
+
+  var cssLines = [];
+  for (var i = 0; i < propNames.length; i++) {
+    cssLines.push('  ' + propNames[i] + ': ' + properties[propNames[i]] + ';');
+  }
+
+  var style = document.createElement('style');
+  style.setAttribute('data-zenreader-custom-props', 'true');
+  style.textContent = ':host {\n' + cssLines.join('\n') + '\n}\n' +
+                       '.shadow-container {\n' + cssLines.join('\n') + '\n}';
+
+  // Insert after base style so custom props are available to all subsequent styles
+  if (shadow.firstChild && shadow.firstChild.nextSibling) {
+    shadow.insertBefore(style, shadow.firstChild.nextSibling);
+  } else {
+    shadow.appendChild(style);
+  }
+}
+
+/**
+ * Extracts @font-face rule blocks from a CSS text string using regex
+ * @param {String} cssText - Raw CSS text to search
+ * @returns {Array} - Array of @font-face rule strings
+ */
+function extractFontFaceRules(cssText) {
+  if (!cssText) return [];
+  var matches = cssText.match(/@font-face\s*\{[^}]*\}/gi);
+  return matches || [];
+}
+
+/**
+ * Injects @font-face rules into both the shadow DOM and the document head.
+ * Deduplicates against previously injected rules using a data attribute marker.
+ * @param {ShadowRoot} shadow - The shadow root
+ * @param {Array} fontFaceRules - Array of @font-face CSS rule strings
+ */
+function injectFontFaces(shadow, fontFaceRules) {
+  if (!fontFaceRules || fontFaceRules.length === 0) return;
+
+  var dedupedRules = [];
+  var existingHead = document.querySelector('style[data-zenreader-fonts]');
+  var existingContent = existingHead ? existingHead.textContent : '';
+
+  for (var i = 0; i < fontFaceRules.length; i++) {
+    if (existingContent.indexOf(fontFaceRules[i]) === -1) {
+      dedupedRules.push(fontFaceRules[i]);
+    }
+  }
+
+  if (dedupedRules.length === 0) return;
+
+  var combined = dedupedRules.join('\n');
+
+  var shadowStyle = document.createElement('style');
+  shadowStyle.textContent = combined;
+  shadow.appendChild(shadowStyle);
+
+  // Fonts must also load in the main document context for Shadow DOM to use them
+  if (existingHead) {
+    existingHead.textContent += '\n' + combined;
+  } else {
+    var headStyle = document.createElement('style');
+    headStyle.setAttribute('data-zenreader-fonts', 'true');
+    headStyle.textContent = combined;
+    document.head.appendChild(headStyle);
   }
 }
 
@@ -189,32 +437,27 @@ function addStylesToShadowDOM(shadow, colors, isMainContent) {
  */
 function createSpecialCssRules(colors) {
   return `
-    /* Fix width issues - ensure all elements respect container boundaries */
     *, *::before, *::after {
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
 
-    /* Remove any fixed positioning that could cause layout issues */
     [style*="position: fixed"],
     [style*="position:fixed"] {
       position: relative !important;
     }
 
-    /* Remove any absolute positioning at the top level that could cause layout issues */
     .shadow-container > [style*="position: absolute"],
     .shadow-container > [style*="position:absolute"] {
       position: relative !important;
     }
 
-    /* Fix for floated elements */
     .shadow-container::after {
       content: "";
       display: table;
       clear: both;
     }
 
-    /* Force main content containers to fill width */
     div[class*="content"],
     div[class*="article"],
     div[class*="post"],
@@ -228,7 +471,6 @@ function createSpecialCssRules(colors) {
       margin-right: 0 !important;
     }
 
-    /* Improvement: Preserve original layout for tag-related elements */
     [class*="tag"],
     [class*="label"],
     [class*="badge"],
@@ -247,7 +489,6 @@ function createSpecialCssRules(colors) {
       vertical-align: middle !important;
     }
 
-    /* Preserve layout for tag containers */
     [class*="tags"],
     [class*="labels"],
     [class*="badges"],
@@ -266,7 +507,6 @@ function createSpecialCssRules(colors) {
       gap: 0.5em !important;
     }
 
-    /* Ensure grid and flex items expand properly */
     [class*="grid"] > *,
     [class*="flex"] > *,
     [style*="display: grid"] > *,
@@ -276,7 +516,6 @@ function createSpecialCssRules(colors) {
       width: 100%;
     }
 
-    /* Ensure code blocks are readable */
     pre, code, .code, [class*="code"] {
       font-family: monospace !important;
       white-space: pre-wrap !important;
@@ -286,13 +525,11 @@ function createSpecialCssRules(colors) {
       overflow-x: auto !important;
     }
 
-    /* Ensure links are visible */
     a:not([data-zenreader-styled]) {
       color: ${colors.isDarkTheme ? '#6ea8fe' : '#0066cc'} !important;
       text-decoration: underline !important;
     }
 
-    /* Ensure tables are visible and fit container */
     table:not([data-zenreader-styled]) {
       border-collapse: collapse !important;
       width: 100% !important;
@@ -303,14 +540,12 @@ function createSpecialCssRules(colors) {
       overflow-x: auto !important;
     }
 
-    /* Ensure images don't overflow */
     img:not([data-zenreader-styled]) {
       max-width: 100% !important;
       height: auto !important;
       object-fit: contain !important;
     }
 
-    /* Fix for common sidebar layouts */
     [class*="sidebar"],
     [id*="sidebar"],
     aside {

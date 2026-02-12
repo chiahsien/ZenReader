@@ -40,8 +40,8 @@ Scripts are loaded as content scripts in this exact order (defined in `manifest.
 3. `content/utils/messageHandler.js` - Chrome message listener (depends on state functions)
 4. `content/styles/styleCache.js` - Style caching with `Map` (pure utility)
 5. `content/styles/elementCloner.js` - Deep clone with inline styles (depends on styleCache)
-6. `content/styles/shadowDomStyles.js` - Shadow DOM CSS injection (no deps)
-7. `content/styles/layoutFixer.js` - Placeholder (empty)
+6. `content/styles/shadowDomStyles.js` - Two-phase Shadow DOM CSS injection: sync (same-origin sheets, custom properties) + async (cross-origin fetch via background, @font-face recovery)
+7. `content/styles/layoutFixer.js` - Pseudo-element materialization (::before/::after)
 8. `content/styles/styleManager.js` - Coordinator stub (empty)
 9. `content/selectionMode.js` - Hover/click selection (depends on state, focusMode)
 10. `content/focusMode.js` - Overlay + Shadow DOM focus view (depends on state, styles, utils)
@@ -50,7 +50,7 @@ Scripts are loaded as content scripts in this exact order (defined in `manifest.
 
 ### Other Scripts
 
-- `background.js` - Service worker: toolbar icon, context menus, tab state tracking
+- `background.js` - Service worker: toolbar icon, context menus, tab state tracking, cross-origin CSS proxy fetch
 - `about/about.js` - About page: i18n, version display
 
 ### Key Global Variables
@@ -65,7 +65,7 @@ background.js  <--chrome.runtime.sendMessage-->  content scripts
   (service worker)                                 (messageHandler.js, state.js)
 ```
 
-Messages use `{ action: string, ... }` format. Actions: `"activate"`, `"stateChanged"`, `"openAboutPage"`.
+Messages use `{ action: string, ... }` format. Actions: `"activate"`, `"stateChanged"`, `"openAboutPage"`, `"fetchCSS"`.
 
 ## Code Style Guidelines
 
@@ -156,6 +156,6 @@ try {
 - Do NOT use ES modules (`import`/`export`) - scripts share globals via injection order
 - Do NOT add npm dependencies or a build step
 - Do NOT use arrow functions for top-level function declarations
-- Do NOT use `async/await` in content scripts (used only in `about.js`)
+- Do NOT use `async/await` in content scripts (used only in `about.js` and `background.js`)
 - Do NOT add inline event handlers in HTML
 - Do NOT use `querySelector` without considering Shadow DOM boundaries

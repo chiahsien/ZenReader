@@ -24,7 +24,9 @@ This allows you to enjoy the content creator's design choices while still elimin
   - Click the extension icon in the toolbar
   - Use the context menu (right-click on any webpage)
 - **Manual Selection Mode**: Select any element on a webpage to focus on
-- **Style Preservation**: Keeps original styling of content including fonts, colors, and layouts
+- **Style Preservation**: Keeps original styling of content including fonts, colors, layouts, and pseudo-elements
+- **Cross-Origin CSS Support**: Fetches and applies stylesheets from external CDNs and third-party domains
+- **Lazy Image Handling**: Resolves lazy-loaded images so they display correctly in focus mode
 - **Responsive Design**: Adjusts to different screen sizes and orientations
 - **Multilingual Support**: Available in multiple languages
 - **Dark Mode Compatible**: Adapts to system dark mode preferences
@@ -119,6 +121,12 @@ ZenReader uses Shadow DOM for style encapsulation, ensuring that the original st
 Key technical features:
 
 - **Shadow DOM** for style isolation
+- **Two-phase CSS injection** — same-origin styles applied synchronously, cross-origin stylesheets fetched asynchronously via the background service worker
+- **CSS custom property propagation** — `:root`/`html`/`body` custom properties (`--var`) are collected and re-injected into the Shadow DOM
+- **@font-face recovery** — font declarations from both same-origin and cross-origin stylesheets are injected into the document and Shadow DOM so web fonts render correctly
+- **Pseudo-element materialization** — `::before` and `::after` pseudo-elements are converted to real DOM nodes with their computed styles preserved
+- **Lazy image resolution** — `data-src`, `data-srcset`, `<noscript>` fallbacks, and placeholder data-URIs are resolved so images display in focus mode
+- **Adaptive clone depth** — tree size is estimated at runtime to choose an appropriate cloning depth, balancing fidelity and performance
 - **Style caching system** for performance optimization
 - **Color analysis** for adapting to page themes (light/dark)
 - **Event propagation management** for proper scrolling behavior

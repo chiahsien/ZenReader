@@ -47,18 +47,19 @@ function setStyleInCache(element, style) {
 /**
  * Recursively captures and caches computed styles for an element and its children
  * @param {HTMLElement} element - The element to capture styles from
+ * @param {Number} depth - Current recursion depth (default 0)
+ * @param {Number} maxDepth - Maximum recursion depth (default unlimited)
  */
-function captureStylesRecursively(element) {
-  // Skip if element is null or not an element node
+function captureStylesRecursively(element, depth, maxDepth) {
   if (!element || element.nodeType !== Node.ELEMENT_NODE) return;
+  if (depth === undefined) depth = 0;
+  if (maxDepth !== undefined && depth > maxDepth) return;
 
-  // Capture this element's computed style
   if (!styleCache.has(element)) {
     styleCache.set(element, window.getComputedStyle(element));
   }
 
-  // Recursively capture styles for all children
-  Array.from(element.children).forEach(child => {
-    captureStylesRecursively(child);
+  Array.from(element.children).forEach(function (child) {
+    captureStylesRecursively(child, depth + 1, maxDepth);
   });
 }

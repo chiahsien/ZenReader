@@ -189,6 +189,34 @@ function openAboutPage() {
   chrome.tabs.create({ url: aboutURL });
 }
 
+/**
+ * Fetches a cross-origin CSS stylesheet via the background service worker,
+ * bypassing content script CORS restrictions.
+ * Uses AbortController with a 3-second timeout to avoid hanging on slow servers.
+ * @param {String} url - The URL of the CSS file to fetch
+ * @param {Function} sendResponse - Chrome message response callback
+ */
+async function fetchCSSFromBackground(url, sendResponse) {
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function () { controller.abort(); }, 3000);
+
+  try {
+    var response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      sendResponse({ success: false, error: 'HTTP ' + response.status });
+      return;
+    }
+
+    var cssText = await response.text();
+    sendResponse({ success: true, cssText: cssText });
+  } catch (e) {
+    clearTimeout(timeoutId);
+    sendResponse({ success: false, error: e.message });
+  }
+}
+
 // Set up event listeners when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
   // Create the page context menu
@@ -261,13 +289,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } catch (e) {
       console.log("Error sending response:", e.message);
     }
+    return false;
   } else if (message.action === "openAboutPage") {
-    // Handle request to open about page
     openAboutPage();
     sendResponse({ success: true });
+    return false;
+  } else if (message.action === "fetchCSS") {
+    fetchCSSFromBackground(message.url, sendResponse);
+    return true;
   }
 
-  // Return false since we're not using sendResponse asynchronously
   return false;
 });
 
