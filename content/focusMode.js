@@ -12,29 +12,30 @@
 function enterFocusMode() {
   if (zenReaderState.isFocusMode || !zenReaderState.selectedElement) return;
 
-  // Set state to true BEFORE any other operations
   zenReaderState.isFocusMode = true;
 
-  // Notify background script of state change immediately
-  // This ensures the context menu gets updated promptly
   updateBackgroundState(true);
 
-  // Clear the style cache before we begin
   clearStyleCache();
 
-  // Prepare by capturing styles from the entire DOM hierarchy
-  captureStylesRecursively(zenReaderState.selectedElement);
+  // Compute adaptive depth based on DOM tree size
+  var treeSize = estimateTreeSize(zenReaderState.selectedElement, 2000);
+  if (treeSize < 100) {
+    zenReaderState.maxDepth = 50;
+  } else if (treeSize <= 1000) {
+    zenReaderState.maxDepth = 20;
+  } else {
+    zenReaderState.maxDepth = 10;
+  }
 
-  // Create overlay
+  captureStylesRecursively(zenReaderState.selectedElement, 0, zenReaderState.maxDepth);
+
   createOverlay();
 
-  // Create focus container
   createFocusContainer();
 
-  // Prevent scrolling of the background page
   document.body.classList.add('zenreader-focus-active');
 
-  // Add event listener for ESC key to exit
   document.addEventListener('keydown', handleKeyDown);
 }
 
@@ -67,8 +68,15 @@ function exitFocusMode() {
   zenReaderState.overlayElement = null;
   zenReaderState.focusContainer = null;
   zenReaderState.exitButton = null;
-  zenReaderState.aboutButton = null; // Reset about button reference
+  zenReaderState.aboutButton = null;
   zenReaderState.shadowRoot = null;
+  zenReaderState.maxDepth = null;
+  zenReaderState.fetchedCSSTexts = null;
+
+  var fontStyle = document.querySelector('style[data-zenreader-fonts]');
+  if (fontStyle && fontStyle.parentNode) {
+    fontStyle.parentNode.removeChild(fontStyle);
+  }
 
   // Clear the style cache
   clearStyleCache();
@@ -193,10 +201,18 @@ function createFocusContainer() {
   }
 
   // Add necessary styles to the shadow DOM
-  addStylesToShadowDOM(zenReaderState.shadowRoot, colorSettings, likelyMainContent);
+  addStylesToShadowDOM(zenReaderState.shadowRoot, colorSettings, likelyMainContent, function (fetchedCSSTexts) {
+    zenReaderState.fetchedCSSTexts = fetchedCSSTexts;
+  });
 
   // Clone selected element with enhanced style preservation
-  const contentClone = cloneElementWithStyles(zenReaderState.selectedElement, likelyMainContent);
+  const contentClone = cloneElementWithStyles(zenReaderState.selectedElement, likelyMainContent, zenReaderState.maxDepth);
+
+  // Resolve lazy-loaded images so they display in focus mode
+  resolveLazyImages(contentClone);
+
+  // Materialize ::before/::after pseudo-elements from the original DOM
+  materializePseudoElements(zenReaderState.selectedElement, contentClone);
 
   // Modify links to open in new tabs for safety
   modifyLinks(contentClone);
