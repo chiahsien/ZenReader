@@ -5,6 +5,7 @@
   "description": "__MSG_appDesc__",
   "default_locale": "en",
   "permissions": ["activeTab", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_icon": {
       "16": "icons/icon16.png",
