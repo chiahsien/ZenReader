@@ -392,17 +392,16 @@ const IMPORTANT_STYLE_PROPERTIES = [
  * Creates a deep clone of an element with inline styles preserved
  * @param {HTMLElement} element - The element to clone
  * @param {Boolean} isMainContent - Whether this is likely main content
+ * @param {Number} maxDepth - Maximum recursion depth for style processing (default 20)
  * @returns {HTMLElement} - The cloned element with preserved styles
  */
-function cloneElementWithStyles(element, isMainContent) {
-  // Create a deep clone of the element
-  const clone = element.cloneNode(true);
+function cloneElementWithStyles(element, isMainContent, maxDepth) {
+  if (maxDepth === undefined) maxDepth = 20;
+  var clone = element.cloneNode(true);
 
-  // Apply computed styles to the clone inline
   applyComputedStylesToElement(clone, element, isMainContent, true);
 
-  // Process all child nodes recursively, but limit depth for performance
-  processChildrenWithStyles(clone, element, isMainContent, 0);
+  processChildrenWithStyles(clone, element, isMainContent, 0, maxDepth);
 
   return clone;
 }
@@ -413,25 +412,20 @@ function cloneElementWithStyles(element, isMainContent) {
  * @param {HTMLElement} sourceElement - The original source element
  * @param {Boolean} isMainContent - Whether this is main content
  * @param {Number} depth - Current recursion depth
+ * @param {Number} maxDepth - Maximum recursion depth
  */
-function processChildrenWithStyles(targetElement, sourceElement, isMainContent, depth) {
-  // Limit recursion depth to prevent performance issues
-  const MAX_DEPTH = 5;
+function processChildrenWithStyles(targetElement, sourceElement, isMainContent, depth, maxDepth) {
+  if (depth > maxDepth) return;
 
-  if (depth > MAX_DEPTH) return;
+  var sourceChildren = sourceElement.children;
+  var targetChildren = targetElement.children;
 
-  const sourceChildren = sourceElement.children;
-  const targetChildren = targetElement.children;
-
-  // Process direct children
-  for (let i = 0; i < sourceChildren.length; i++) {
+  for (var i = 0; i < sourceChildren.length; i++) {
     if (i < targetChildren.length && sourceChildren[i].nodeType === Node.ELEMENT_NODE) {
-      // Apply styles to this child
       applyComputedStylesToElement(targetChildren[i], sourceChildren[i], isMainContent, false);
 
-      // Recursively process its children
       if (sourceChildren[i].children.length > 0) {
-        processChildrenWithStyles(targetChildren[i], sourceChildren[i], isMainContent, depth + 1);
+        processChildrenWithStyles(targetChildren[i], sourceChildren[i], isMainContent, depth + 1, maxDepth);
       }
     }
   }

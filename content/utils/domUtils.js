@@ -5,6 +5,26 @@
  */
 
 /**
+ * Estimates the number of element nodes in a subtree
+ * Stops counting at a cap to avoid performance issues on very large DOMs
+ * @param {HTMLElement} element - Root element to count from
+ * @param {Number} cap - Maximum count before returning early (default 2000)
+ * @returns {Number} - Estimated element count (capped at cap value)
+ */
+function estimateTreeSize(element, cap) {
+  if (!element) return 0;
+  if (cap === undefined) cap = 2000;
+
+  var count = 0;
+  var walker = document.createTreeWalker(element, NodeFilter.SHOW_ELEMENT);
+  while (walker.nextNode()) {
+    count++;
+    if (count >= cap) return cap;
+  }
+  return count;
+}
+
+/**
  * Modifies links in the cloned content for safety and fixes common layout issues
  * @param {HTMLElement} element - The cloned element
  */
@@ -132,4 +152,73 @@ function modifyLinks(element) {
       }
     }
   });
+}
+
+/**
+ * Resolves lazy-loaded images in a cloned element tree so they display in focus mode.
+ * Handles common lazy-loading patterns. Operates on the clone only, never the original DOM.
+ * @param {HTMLElement} cloneElement - The cloned element tree to process
+ */
+function resolveLazyImages(cloneElement) {
+  if (!cloneElement) return;
+
+  var images = cloneElement.querySelectorAll('img');
+  for (var i = 0; i < images.length; i++) {
+    var img = images[i];
+
+    var lazySrc = img.getAttribute('data-src') ||
+                  img.getAttribute('data-lazy-src') ||
+                  img.getAttribute('data-original');
+    if (lazySrc) {
+      img.setAttribute('src', lazySrc);
+    }
+
+    var lazySrcset = img.getAttribute('data-srcset') || img.getAttribute('data-lazy-srcset');
+    if (lazySrcset) {
+      img.setAttribute('srcset', lazySrcset);
+    }
+
+    var lazySizes = img.getAttribute('data-sizes');
+    if (lazySizes) {
+      img.setAttribute('sizes', lazySizes);
+    }
+
+    // Replace placeholder data-URI with real src if available
+    var currentSrc = img.getAttribute('src') || '';
+    if (currentSrc.indexOf('data:image/') === 0 && img.getAttribute('data-src')) {
+      img.setAttribute('src', img.getAttribute('data-src'));
+    }
+
+    if (img.getAttribute('loading') === 'lazy') {
+      img.removeAttribute('loading');
+    }
+
+    // Remove lazy-loading CSS classes that may block rendering
+    var className = img.className || '';
+    if (typeof className === 'string') {
+      img.className = className.replace(/\b(lazy|lazyload|lazyloaded|lazyloading)\b/g, '').trim();
+    }
+  }
+
+  // Handle <picture> <source> elements with lazy srcset
+  var sources = cloneElement.querySelectorAll('picture source[data-srcset]');
+  for (var j = 0; j < sources.length; j++) {
+    var source = sources[j];
+    source.setAttribute('srcset', source.getAttribute('data-srcset'));
+  }
+
+  // Handle <noscript> fallback images: if an img has a <noscript> sibling containing an <img>,
+  // extract the noscript image's src as the real source
+  var noscripts = cloneElement.querySelectorAll('noscript');
+  for (var k = 0; k < noscripts.length; k++) {
+    var noscript = noscripts[k];
+    var prevImg = noscript.previousElementSibling;
+    if (prevImg && prevImg.tagName === 'IMG') {
+      var noscriptContent = noscript.textContent || '';
+      var srcMatch = noscriptContent.match(/src=["']([^"']+)["']/);
+      if (srcMatch && srcMatch[1]) {
+        prevImg.setAttribute('src', srcMatch[1]);
+      }
+    }
+  }
 }
