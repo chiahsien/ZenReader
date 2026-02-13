@@ -1,0 +1,102 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "Nom de l'extension"
+  },
+  "appDesc": {
+    "message": "Concentrez-vous sur le contenu important - Une expérience de lecture sans distraction",
+    "description": "Description de l'extension"
+  },
+  "exitFocusMode": {
+    "message": "Quitter le mode focus",
+    "description": "Texte du bouton pour quitter le mode focus"
+  },
+  "enterFocusMode": {
+    "message": "Entrer en mode focus",
+    "description": "Texte de l'élément du menu contextuel pour entrer en mode focus"
+  },
+  "aboutZenReader": {
+    "message": "À propos de ZenReader",
+    "description": "Texte pour le titre de la page et l'élément du menu contextuel de la page d'information"
+  },
+  "aboutIntroTitle": {
+    "message": "À propos de ZenReader",
+    "description": "Titre de la section d'introduction dans la page d'information"
+  },
+  "aboutDescription": {
+    "message": "ZenReader offre une expérience de lecture sans distraction, vous permettant de vous concentrer sur le contenu important.",
+    "description": "Description de la fonctionnalité de ZenReader"
+  },
+  "aboutDifference": {
+    "message": "Contrairement aux autres modes de lecture, ZenReader préserve le style original du contenu web tout en supprimant les distractions.",
+    "description": "Description de la différence entre ZenReader et les autres modes de lecture"
+  },
+  "aboutPhilosophy": {
+    "message": "Cela vous permet de vous concentrer sur l'essentiel tout en profitant de l'expérience visuelle voulue par le site web.",
+    "description": "Description de la philosophie de ZenReader"
+  },
+  "philosophyQuote": {
+    "message": "Concentrez-vous sur l'essentiel sans perdre l'expérience visuelle voulue par le site web.",
+    "description": "Citation de la philosophie centrale"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "Style Original",
+    "description": "Titre pour la fonctionnalité de style original"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "Préserve l'expérience visuelle voulue et les éléments de design du site web.",
+    "description": "Description de la fonctionnalité de style original"
+  },
+  "featureSelectionTitle": {
+    "message": "Sélection Précise",
+    "description": "Titre pour la fonctionnalité de sélection"
+  },
+  "featureSelectionDesc": {
+    "message": "Sélectionnez exactement ce que vous voulez lire, d'un paragraphe à un article entier.",
+    "description": "Description de la fonctionnalité de sélection"
+  },
+  "featureAdaptiveTitle": {
+    "message": "Affichage Adaptatif",
+    "description": "Titre pour la fonctionnalité d'affichage adaptatif"
+  },
+  "featureAdaptiveDesc": {
+    "message": "S'adapte automatiquement aux modes clair ou sombre selon vos préférences système.",
+    "description": "Description de la fonctionnalité d'affichage adaptatif"
+  },
+  "feedbackTitle": {
+    "message": "Retour d'Information",
+    "description": "Titre pour la section de retour d'information"
+  },
+  "feedbackDescription": {
+    "message": "Vos commentaires aident à améliorer ZenReader. Vous avez trouvé un bug ou avez une suggestion ?",
+    "description": "Texte descriptif dans la section de retour d'information"
+  },
+  "githubIssue": {
+    "message": "Soumettre un problème sur GitHub",
+    "description": "Texte pour le bouton de problème GitHub"
+  },
+  "supportTitle": {
+    "message": "Soutenir le Développement",
+    "description": "Titre pour la section de don"
+  },
+  "supportDescription": {
+    "message": "Si vous trouvez ZenReader utile, envisagez de soutenir son développement. Votre soutien aide à maintenir ce projet en vie et à l'améliorer !",
+    "description": "Texte descriptif dans la section de don"
+  },
+  "supportNote": {
+    "message": "Votre soutien est entièrement volontaire mais très apprécié !",
+    "description": "Texte de note sous le bouton de don"
+  },
+  "buyMeACoffee": {
+    "message": "M'offrir un café",
+    "description": "Texte pour le bouton 'Buy Me a Coffee'"
+  },
+  "versionLabel": {
+    "message": "Version",
+    "description": "Étiquette pour l'information de version"
+  },
+  "developedBy": {
+    "message": "Développé par",
+    "description": "Étiquette pour l'information du développeur"
+  }
+}

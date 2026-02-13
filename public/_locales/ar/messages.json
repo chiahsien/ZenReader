@@ -1,0 +1,102 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "اسم الإضافة"
+  },
+  "appDesc": {
+    "message": "ركز على المحتوى المهم - تجربة قراءة بدون تشتيت",
+    "description": "وصف الإضافة"
+  },
+  "exitFocusMode": {
+    "message": "الخروج من وضع التركيز",
+    "description": "نص زر الخروج من وضع التركيز"
+  },
+  "enterFocusMode": {
+    "message": "الدخول إلى وضع التركيز",
+    "description": "نص عنصر القائمة السياقية للدخول إلى وضع التركيز"
+  },
+  "aboutZenReader": {
+    "message": "حول ZenReader",
+    "description": "نص عنوان الصفحة وعنصر القائمة السياقية لصفحة المعلومات"
+  },
+  "aboutIntroTitle": {
+    "message": "حول ZenReader",
+    "description": "عنوان قسم المقدمة في صفحة المعلومات"
+  },
+  "aboutDescription": {
+    "message": "يوفر ZenReader تجربة قراءة بدون تشتيت، مما يتيح لك التركيز على المحتوى المهم.",
+    "description": "وصف وظائف ZenReader"
+  },
+  "aboutDifference": {
+    "message": "على عكس أوضاع القراءة الأخرى، يحافظ ZenReader على النمط الأصلي لمحتوى الويب مع إزالة عوامل التشتيت.",
+    "description": "وصف كيف يختلف ZenReader عن أوضاع القراءة الأخرى"
+  },
+  "aboutPhilosophy": {
+    "message": "هذا يتيح لك التركيز على ما يهم مع الاستمتاع بالتجربة البصرية المقصودة للموقع.",
+    "description": "وصف فلسفة ZenReader"
+  },
+  "philosophyQuote": {
+    "message": "ركز على ما يهم دون فقدان التجربة البصرية المقصودة للموقع.",
+    "description": "اقتباس الفلسفة الأساسية"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "النمط الأصلي",
+    "description": "عنوان ميزة النمط الأصلي"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "يحافظ على التجربة البصرية المقصودة وعناصر التصميم للموقع.",
+    "description": "وصف ميزة النمط الأصلي"
+  },
+  "featureSelectionTitle": {
+    "message": "اختيار دقيق",
+    "description": "عنوان ميزة الاختيار"
+  },
+  "featureSelectionDesc": {
+    "message": "اختر بالضبط ما تريد قراءته، من فقرة واحدة إلى مقال كامل.",
+    "description": "وصف ميزة الاختيار"
+  },
+  "featureAdaptiveTitle": {
+    "message": "عرض متكيف",
+    "description": "عنوان ميزة العرض المتكيف"
+  },
+  "featureAdaptiveDesc": {
+    "message": "يتكيف تلقائيًا مع الوضع الفاتح أو الداكن بناءً على تفضيلات نظامك.",
+    "description": "وصف ميزة العرض المتكيف"
+  },
+  "feedbackTitle": {
+    "message": "تعليقات",
+    "description": "عنوان قسم التعليقات"
+  },
+  "feedbackDescription": {
+    "message": "تعليقاتك تساعد في تحسين ZenReader. هل وجدت خطأ أو لديك اقتراح؟",
+    "description": "نص وصفي في قسم التعليقات"
+  },
+  "githubIssue": {
+    "message": "إرسال مشكلة على GitHub",
+    "description": "نص زر مشكلة GitHub"
+  },
+  "supportTitle": {
+    "message": "دعم التطوير",
+    "description": "عنوان قسم التبرع"
+  },
+  "supportDescription": {
+    "message": "إذا وجدت ZenReader مفيدًا، فكر في دعم تطويره. دعمك يساعد في الحفاظ على هذا المشروع حيًا وتحسينه!",
+    "description": "نص وصفي في قسم التبرع"
+  },
+  "supportNote": {
+    "message": "دعمك طوعي تمامًا ولكنه مقدر كثيرًا!",
+    "description": "نص ملاحظة أسفل زر التبرع"
+  },
+  "buyMeACoffee": {
+    "message": "اشترِ لي قهوة",
+    "description": "نص زر 'Buy Me a Coffee'"
+  },
+  "versionLabel": {
+    "message": "الإصدار",
+    "description": "تسمية معلومات الإصدار"
+  },
+  "developedBy": {
+    "message": "طوره",
+    "description": "تسمية معلومات المطور"
+  }
+}

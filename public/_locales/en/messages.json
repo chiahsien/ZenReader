@@ -1,0 +1,102 @@
+{
+  "appName": {
+    "message": "ZenReader",
+    "description": "The name of the extension"
+  },
+  "appDesc": {
+    "message": "Focus on what matters - A distraction-free reading experience",
+    "description": "The description of the extension"
+  },
+  "exitFocusMode": {
+    "message": "Exit Focus Mode",
+    "description": "Text for the button to exit focus mode"
+  },
+  "enterFocusMode": {
+    "message": "Enter Focus Mode",
+    "description": "Text for the context menu item to enter focus mode"
+  },
+  "aboutZenReader": {
+    "message": "About ZenReader",
+    "description": "Text for about page title and context menu item"
+  },
+  "aboutIntroTitle": {
+    "message": "About ZenReader",
+    "description": "Title for the intro section in the about page"
+  },
+  "aboutDescription": {
+    "message": "ZenReader provides a distraction-free reading experience, allowing you to focus on important content.",
+    "description": "Description of ZenReader functionality"
+  },
+  "aboutDifference": {
+    "message": "Unlike other reader modes, ZenReader preserves the original styling of web content while removing distractions.",
+    "description": "Description of how ZenReader differs from other reader modes"
+  },
+  "aboutPhilosophy": {
+    "message": "This enables you to focus on what matters while still enjoying the website's intended visual experience.",
+    "description": "Description of ZenReader's philosophy"
+  },
+  "philosophyQuote": {
+    "message": "Focus on what matters without losing the website's intended visual experience.",
+    "description": "Core philosophy quote"
+  },
+  "featureOriginalStylingTitle": {
+    "message": "Original Styling",
+    "description": "Title for original styling feature"
+  },
+  "featureOriginalStylingDesc": {
+    "message": "Preserves website's intended visual experience and design elements.",
+    "description": "Description of original styling feature"
+  },
+  "featureSelectionTitle": {
+    "message": "Precise Selection",
+    "description": "Title for selection feature"
+  },
+  "featureSelectionDesc": {
+    "message": "Select exactly what you want to read, from a paragraph to an entire article.",
+    "description": "Description of selection feature"
+  },
+  "featureAdaptiveTitle": {
+    "message": "Adaptive Display",
+    "description": "Title for adaptive display feature"
+  },
+  "featureAdaptiveDesc": {
+    "message": "Automatically adapts to light and dark modes based on your system preferences.",
+    "description": "Description of adaptive display feature"
+  },
+  "feedbackTitle": {
+    "message": "Feedback",
+    "description": "Title for the feedback section"
+  },
+  "feedbackDescription": {
+    "message": "Your feedback helps make ZenReader better. Found a bug or have a suggestion?",
+    "description": "Description text in the feedback section"
+  },
+  "githubIssue": {
+    "message": "Submit an issue on GitHub",
+    "description": "Text for the GitHub issue button"
+  },
+  "supportTitle": {
+    "message": "Support Development",
+    "description": "Title for the donation section"
+  },
+  "supportDescription": {
+    "message": "If you find ZenReader useful, consider supporting its development. Your support helps keep this project alive and improving!",
+    "description": "Description text in the donation section"
+  },
+  "supportNote": {
+    "message": "Your support is entirely voluntary but greatly appreciated!",
+    "description": "Note text below the donation button"
+  },
+  "buyMeACoffee": {
+    "message": "Buy me a coffee",
+    "description": "Text for Buy Me a Coffee button"
+  },
+  "versionLabel": {
+    "message": "Version",
+    "description": "Label for version information"
+  },
+  "developedBy": {
+    "message": "Developed by",
+    "description": "Label for developer information"
+  }
+}
