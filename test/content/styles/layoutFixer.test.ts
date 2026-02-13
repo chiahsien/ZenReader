@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parsePseudoContent } from '../src/content/styles/layoutFixer';
+import { parsePseudoContent } from '../../../src/content/styles/layoutFixer';
 
 describe('parsePseudoContent', () => {
   it('returns null for "none"', () => {

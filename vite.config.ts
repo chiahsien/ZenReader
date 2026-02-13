@@ -8,7 +8,7 @@ export default defineConfig({
       additionalInputs: [
         'src/about/about.html',
         'src/content/index.ts',
-        'src/styles/content.css',
+        'src/content/content.css',
       ],
     }),
   ],

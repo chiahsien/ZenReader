@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isColorDark, adjustColorBrightness } from '../src/content/utils/colorUtils';
+import { isColorDark, adjustColorBrightness } from '../../../src/content/utils/colorUtils';
 
 describe('isColorDark', () => {
   it('returns true for black hex', () => {

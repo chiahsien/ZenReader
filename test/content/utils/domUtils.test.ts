@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveLazyImages, estimateTreeSize } from '../src/content/utils/domUtils';
+import { resolveLazyImages, estimateTreeSize } from '../../../src/content/utils/domUtils';
 
 describe('resolveLazyImages', () => {
   it('sets src from data-src', () => {

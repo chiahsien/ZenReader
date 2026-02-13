@@ -1,10 +1,10 @@
 # ZenReader
 
-![ZenReader Logo](icons/icon128.png)
+![ZenReader Logo](public/icons/icon128.png)
 
 ZenReader is a Chrome extension designed to provide a distraction-free reading experience while preserving the original styling of web content. It allows users to focus on specific sections of a webpage by creating an overlay that highlights only the content they want to read.
 
-![screenshot](assets/screenshots/1.png)
+![screenshot](docs/assets/screenshots/1.png)
 
 <a href="https://www.buymeacoffee.com/chiahsien" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
@@ -53,7 +53,7 @@ This allows you to enjoy the content creator's design choices while still elimin
 
 ### From Chrome Web Store
 
-<a href="https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp?ref=github" target="_blank"><img src="assets/chrome_web_store_download_button.png" width="300"></a>
+<a href="https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp?ref=github" target="_blank"><img src="docs/assets/chrome_web_store_download_button.png" width="300"></a>
 
 ### Manual Installation (Developer Mode)
 
@@ -146,7 +146,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Privacy Policies
 
-See the [Privacy Policies](PrivacyPolicies.md) file for details.
+See the [Privacy Policies](docs/PrivacyPolicies.md) file for details.
 
 ## Contributing
 

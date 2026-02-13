@@ -112,7 +112,7 @@ async function injectAndActivate(tab: chrome.tabs.Tab): Promise<void> {
     try {
       await chrome.scripting.insertCSS({
         target: { tabId: tab.id },
-        files: ['src/styles/content.css'],
+        files: ['src/content/content.css'],
       });
       await chrome.scripting.executeScript({
         target: { tabId: tab.id },

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractFontFaceRules } from '../src/content/styles/shadowDomStyles';
+import { extractFontFaceRules } from '../../../src/content/styles/shadowDomStyles';
 
 describe('extractFontFaceRules', () => {
   it('returns empty array for empty string', () => {
