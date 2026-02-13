@@ -1,0 +1,216 @@
+/**
+ * ZenReader - Styles
+ *
+ * This stylesheet defines all visual elements for the ZenReader extension including:
+ * - Selection mode highlighting
+ * - Focus mode overlay
+ * - Focus container styling
+ * - Exit button appearance
+ * - RTL language support for Arabic and other RTL languages
+ */
+
+/* Selection mode hover effect - highlight elements with pink dashed border */
+.zenreader-hover {
+    outline: 3px dashed #ff69b4 !important;
+    outline-offset: 2px !important;
+    cursor: pointer !important;
+}
+
+/* Overlay - dark background that covers the original page */
+.zenreader-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    z-index: 2147483646 !important;
+    /* Very high z-index to ensure it's on top */
+    pointer-events: all !important;
+    /* Ensure it catches all events */
+}
+
+/* Focus container - holds the toolbar and content wrapper */
+.zenreader-focus-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 80vw !important;
+    max-height: 90vh !important;
+    border-radius: 5px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    z-index: 2147483647 !important;
+    /* Highest z-index to be on top of overlay */
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    /* Hide any overflow from children */
+    pointer-events: all !important;
+    /* Ensure it catches all events */
+}
+
+/* Toolbar - contains the title, exit button and potentially other controls */
+.zenreader-toolbar {
+    flex: 0 0 auto !important;
+    height: 45px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 15px !important;
+    background-color: #ffffff !important;
+    border-radius: 5px 5px 0 0 !important;
+    position: relative !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Page title in toolbar */
+.zenreader-title {
+    font-size: 16px !important;
+    font-weight: bold !important;
+    color: #000000 !important;
+    max-width: 85% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    flex: 1 !important;
+}
+
+/* About button specific styles */
+.zenreader-about-button {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    border-radius: 50% !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.2s !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    margin-right: 10px !important;
+}
+
+/* Exit button - positioned on the right side */
+.zenreader-exit-button {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    border-radius: 50% !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.2s !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    margin-left: 10px !important;
+}
+
+/* Content wrapper - scrollable container for the actual content */
+.zenreader-content-wrapper {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    padding: 30px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    /* Ensure it can receive wheel events independently */
+    overscroll-behavior: contain !important;
+}
+
+/* Ensure proper content width */
+.zenreader-content-wrapper>* {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    /* Preserve original styles but ensure it fits the container */
+    max-width: 100% !important;
+}
+
+/* Ensure text is readable */
+.zenreader-content-wrapper {
+    color: #333 !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+}
+
+/* When focus mode is active, prevent scroll on body without changing position */
+body.zenreader-focus-active {
+    overflow: hidden !important;
+}
+
+/* Adjust dark themes */
+@media (prefers-color-scheme: dark) {
+    .zenreader-focus-container {
+        background-color: #222 !important;
+    }
+
+    .zenreader-toolbar {
+        background-color: #1a1a1a !important;
+        border-bottom: 1px solid #333333 !important;
+    }
+
+    .zenreader-title {
+        color: #ffffff !important;
+    }
+
+    .zenreader-content-wrapper {
+        color: #f0f0f0 !important;
+    }
+
+    .zenreader-exit-button,
+    .zenreader-about-button {
+        background-color: transparent !important;
+        color: #f0f0f0 !important;
+    }
+
+    .zenreader-exit-button:hover,
+    .zenreader-about-button:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+}
+
+/* RTL Language Support */
+html[dir="rtl"] .zenreader-toolbar {
+    direction: rtl !important;
+}
+
+html[dir="rtl"] .zenreader-about-button {
+    margin-right: 0 !important;
+    margin-left: 10px !important;
+}
+
+html[dir="rtl"] .zenreader-exit-button {
+    margin-left: 0 !important;
+    margin-right: 10px !important;
+}
+
+/* Ensure cloned content inherits RTL direction from parent document */
+html[dir="rtl"] .zenreader-content-wrapper {
+    direction: rtl !important;
+}
+
+/* Shadow container should also respect RTL */
+html[dir="rtl"] .shadow-container {
+    direction: rtl !important;
+    text-align: right !important;
+}
