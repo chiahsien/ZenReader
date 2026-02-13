@@ -1,0 +1,20 @@
+{
+  "name": "zenreader",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "happy-dom": "^15.11.7",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.11",
+    "vite-plugin-web-extension": "^4.4.3",
+    "vitest": "^2.1.8"
+  }
+}

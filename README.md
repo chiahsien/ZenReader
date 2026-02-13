@@ -1,10 +1,10 @@
 # ZenReader
 
-![ZenReader Logo](icons/icon128.png)
+![ZenReader Logo](public/icons/icon128.png)
 
 ZenReader is a Chrome extension designed to provide a distraction-free reading experience while preserving the original styling of web content. It allows users to focus on specific sections of a webpage by creating an overlay that highlights only the content they want to read.
 
-![screenshot](assets/screenshots/1.png)
+![screenshot](docs/assets/screenshots/1.png)
 
 <a href="https://www.buymeacoffee.com/chiahsien" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
@@ -53,14 +53,14 @@ This allows you to enjoy the content creator's design choices while still elimin
 
 ### From Chrome Web Store
 
-<a href="https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp?ref=github" target="_blank"><img src="assets/chrome_web_store_download_button.png" width="300"></a>
+<a href="https://chromewebstore.google.com/detail/zenreader/nmcailccifjhlckggldjfdbplcbealjp?ref=github" target="_blank"><img src="docs/assets/chrome_web_store_download_button.png" width="300"></a>
 
 ### Manual Installation (Developer Mode)
 
 1. Go to [Releases](https://github.com/chiahsien/ZenReader/releases) page to download latest version's zip file, then decompress it.
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable `Developer mode` by toggling the switch in the top-right corner
-4. Click `Load unpacked` and select the ZenReader directory
+4. Click `Load unpacked` and select the decompressed directory
 5. The extension should now be installed and visible in your toolbar
 
 ## Development
@@ -69,56 +69,122 @@ This allows you to enjoy the content creator's design choices while still elimin
 
 ```
 ZenReader/
-├── manifest.json               # Extension configuration
-├── background.js               # Background script for extension management
-├── styles.css                  # Global styles for the extension
-├── icons/                      # Extension icons in various sizes
-├── _locales/                   # Internationalization files
-├── about/                      # About page files
-│   ├── about.html              # About page HTML structure
-│   ├── about.css               # About page styling
-│   └── about.js                # About page functionality
-└── content/                    # Content scripts for webpage interaction
-    ├── index.js                # Main entry point for content scripts
-    ├── focusMode.js            # Reading mode implementation
-    ├── selectionMode.js        # Element selection handling
-    ├── state.js                # State management
-    ├── styles/                 # Style management
-    │   ├── elementCloner.js    # Style preservation for cloned elements
-    │   ├── layoutFixer.js      # Fixing layout issues
-    │   ├── shadowDomStyles.js  # Shadow DOM styling
-    │   ├── styleCache.js       # Caching computed styles
-    │   └── styleManager.js     # Central style coordination
-    └── utils/                  # Utility functions
-        ├── colorUtils.js       # Color analysis and manipulation
-        ├── domUtils.js         # DOM manipulation utilities
-        └── messageHandler.js   # Communication with background script
+├── src/                                # Source code
+│   ├── manifest.json                   # Extension configuration (Manifest V3)
+│   ├── global.d.ts                     # TypeScript global type declarations
+│   ├── background/
+│   │   └── index.ts                    # Service worker: icon, context menus, on-demand injection
+│   ├── content/
+│   │   ├── index.ts                    # Content script entry point
+│   │   ├── state.ts                    # State management with background sync
+│   │   ├── selectionMode.ts            # Element hover/click selection
+│   │   ├── focusMode.ts                # Focus overlay with Shadow DOM
+│   │   ├── content.css                 # Content script styles
+│   │   ├── styles/                     # Style processing modules
+│   │   │   ├── styleCache.ts           # Computed style caching
+│   │   │   ├── elementCloner.ts        # Deep clone with inline styles
+│   │   │   ├── shadowDomStyles.ts      # Shadow DOM CSS injection
+│   │   │   └── layoutFixer.ts          # Pseudo-element materialization
+│   │   └── utils/                      # Utility modules
+│   │       ├── colorUtils.ts           # Color analysis and manipulation
+│   │       ├── domUtils.ts             # DOM helpers and lazy image resolution
+│   │       └── messageHandler.ts       # Chrome message listener
+│   └── about/                          # About page
+│       ├── about.html
+│       ├── about.ts
+│       └── about.css
+├── public/                             # Static assets (copied to dist as-is)
+│   ├── _locales/                       # i18n message files (10 locales)
+│   └── icons/                          # Extension icons
+├── test/                               # Unit tests (mirrors src/ structure)
+│   └── content/
+│       ├── styles/                     # Tests for style modules
+│       └── utils/                      # Tests for utility modules
+├── docs/                               # Documentation and GitHub assets
+│   ├── PrivacyPolicies.md
+│   └── assets/                         # Screenshots and store images
+├── package.json                        # npm dependencies and scripts
+├── tsconfig.json                       # TypeScript configuration
+├── vite.config.ts                      # Vite build configuration
+├── vitest.config.ts                    # Vitest test configuration
+└── build.sh                            # Production packaging script
 ```
 
-### Building for Production
+### Prerequisites
 
-A build script is included to package the extension for Chrome Web Store submission:
+- [Node.js](https://nodejs.org/) (v18 or later) — includes npm
+
+  If you don't have Node.js installed, pick one of the following methods:
+
+  **macOS (Homebrew)**
+  ```bash
+  brew install node
+  ```
+
+  **Windows / macOS / Linux (official installer)**
+
+  Download and run the installer from [https://nodejs.org/](https://nodejs.org/) (LTS version recommended).
+
+  **Verify installation**
+  ```bash
+  node -v    # should print v18.x.x or later
+  npm -v     # should print 9.x.x or later
+  ```
+
+### Setup
 
 ```bash
-# Make the script executable
-chmod +x build.sh
+# Clone the repository
+git clone https://github.com/chiahsien/ZenReader.git
+cd ZenReader
 
-# Run the build script
+# Install dependencies
+npm install
+```
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Type-check and build for production (output in `dist/`) |
+| `npm run test` | Run unit tests |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run dev` | Start Vite dev server |
+
+### Loading in Chrome (Development)
+
+1. Run `npm run build` to generate the `dist/` directory
+2. Open `chrome://extensions/` and enable **Developer mode**
+3. Click **Load unpacked** and select the `dist/` directory
+4. After making code changes, run `npm run build` again and click the reload button on the extension card
+
+### Building for Chrome Web Store
+
+A build script is included to create a production-ready zip package:
+
+```bash
+chmod +x build.sh
 ./build.sh
 ```
 
 The script will:
 
-- Extract the current version from manifest.json
-- Create a zip file with the necessary files
-- Remove development files
-- Output a production-ready package
+1. Run TypeScript type checking (`tsc --noEmit`)
+2. Build with Vite (compiles TypeScript, bundles modules, copies static assets to `dist/`)
+3. Clean development artifacts from `dist/`
+4. Create a versioned zip file (e.g., `ZenReader_v2.0.0_20260213.zip`) ready for submission
 
 ## Technical Details
 
-ZenReader uses Shadow DOM for style encapsulation, ensuring that the original styling of selected content is preserved while preventing style leakage between the webpage and the focus mode interface.
+ZenReader is built with **TypeScript** and bundled by **Vite** into a Chrome Manifest V3 extension. It uses Shadow DOM for style encapsulation, ensuring that the original styling of selected content is preserved while preventing style leakage between the webpage and the focus mode interface.
 
-Key technical features:
+### Architecture
+
+- **On-demand content script injection** — scripts are injected only when the user activates the extension (via `chrome.scripting` API), instead of being loaded on every page
+- **ES Modules + Vite bundling** — TypeScript source modules are bundled into a single IIFE for content script injection, with tree-shaking for minimal bundle size
+- **Type-safe codebase** — strict TypeScript with interfaces for state management and message passing
+
+### Style Preservation
 
 - **Shadow DOM** for style isolation
 - **Two-phase CSS injection** — same-origin styles applied synchronously, cross-origin stylesheets fetched asynchronously via the background service worker
@@ -146,7 +212,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Privacy Policies
 
-See the [Privacy Policies](PrivacyPolicies.md) file for details.
+See the [Privacy Policies](docs/PrivacyPolicies.md) file for details.
 
 ## Contributing
 

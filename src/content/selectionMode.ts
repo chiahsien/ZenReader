@@ -1,35 +1,20 @@
 /**
  * ZenReader - Selection Mode Module
  *
- * This script manages the selection mode which allows users to pick an element to focus on.
- * It handles element highlighting, hover effects, and selection event handling.
+ * Manages the selection mode which allows users to pick an element to focus on.
+ * Handles element highlighting, hover effects, and selection event handling.
  */
 
-/**
- * Initializes the selection mode allowing users to pick an element to focus on
- */
-function startSelectionMode() {
-  if (zenReaderState.isSelectionMode || zenReaderState.isFocusMode) return;
-
-  zenReaderState.isSelectionMode = true;
-
-  // Add hover effect on mouseover
-  document.addEventListener('mouseover', handleMouseOver);
-  document.addEventListener('mouseout', handleMouseOut);
-  document.addEventListener('click', handleElementSelection, true);
-
-  // Allow cancellation with ESC key
-  document.addEventListener('keydown', handleKeyDown);
-}
+import { getState } from './state';
+import { enterFocusMode } from './focusMode';
 
 /**
  * Handles mouse over events during selection mode
- * @param {Event} event - The mouseover event
  */
-function handleMouseOver(event) {
-  if (!zenReaderState.isSelectionMode) return;
+function handleMouseOver(event: MouseEvent): void {
+  if (!getState().isSelectionMode) return;
 
-  const target = event.target;
+  const target = event.target as HTMLElement;
 
   // Skip body and html elements
   if (target === document.body || target === document.documentElement) return;
@@ -41,12 +26,11 @@ function handleMouseOver(event) {
 
 /**
  * Handles mouse out events during selection mode
- * @param {Event} event - The mouseout event
  */
-function handleMouseOut(event) {
-  if (!zenReaderState.isSelectionMode) return;
+function handleMouseOut(event: MouseEvent): void {
+  if (!getState().isSelectionMode) return;
 
-  const target = event.target;
+  const target = event.target as HTMLElement;
 
   // Remove visual indicator
   target.classList.remove('zenreader-hover');
@@ -55,17 +39,18 @@ function handleMouseOut(event) {
 
 /**
  * Handles element selection when user clicks during selection mode
- * @param {Event} event - The click event
  */
-function handleElementSelection(event) {
-  if (!zenReaderState.isSelectionMode) return;
+function handleElementSelection(event: MouseEvent): void {
+  if (!getState().isSelectionMode) return;
 
   // Prevent default click behavior
   event.preventDefault();
   event.stopPropagation();
 
+  const state = getState();
+
   // Save the selected element
-  zenReaderState.selectedElement = event.target;
+  state.selectedElement = event.target as HTMLElement;
 
   // Exit selection mode
   exitSelectionMode();
@@ -75,10 +60,26 @@ function handleElementSelection(event) {
 }
 
 /**
+ * Initializes the selection mode allowing users to pick an element to focus on
+ */
+export function startSelectionMode(): void {
+  const state = getState();
+  if (state.isSelectionMode || state.isFocusMode) return;
+
+  state.isSelectionMode = true;
+
+  // Add hover effect on mouseover
+  document.addEventListener('mouseover', handleMouseOver);
+  document.addEventListener('mouseout', handleMouseOut);
+  document.addEventListener('click', handleElementSelection, true);
+}
+
+/**
  * Exits the selection mode
  */
-function exitSelectionMode() {
-  if (!zenReaderState.isSelectionMode) return;
+export function exitSelectionMode(): void {
+  const state = getState();
+  if (!state.isSelectionMode) return;
 
   // Remove event listeners
   document.removeEventListener('mouseover', handleMouseOver);
@@ -87,17 +88,17 @@ function exitSelectionMode() {
 
   // Remove hover effect from all elements
   const hoverElements = document.querySelectorAll('.zenreader-hover');
-  hoverElements.forEach(el => el.classList.remove('zenreader-hover'));
+  hoverElements.forEach(function (el) {
+    el.classList.remove('zenreader-hover');
+  });
 
-  zenReaderState.isSelectionMode = false;
+  state.isSelectionMode = false;
 }
 
 /**
  * Analyzes selected element to determine if it's a main content container
- * @param {HTMLElement} element - The element to analyze
- * @returns {Boolean} - True if the element appears to be main content
  */
-function isMainContent(element) {
+export function isMainContent(element: HTMLElement | null): boolean {
   if (!element) return false;
 
   // Check tag name - articles and sections are likely main content
@@ -111,7 +112,7 @@ function isMainContent(element) {
   if (className && typeof className === 'string') {
     const lcClass = className.toLowerCase();
     const contentIndicators = ['content', 'article', 'post', 'entry', 'main', 'body'];
-    if (contentIndicators.some(indicator => lcClass.includes(indicator))) {
+    if (contentIndicators.some(function (indicator) { return lcClass.includes(indicator); })) {
       return true;
     }
   }
@@ -121,7 +122,7 @@ function isMainContent(element) {
   if (id && typeof id === 'string') {
     const lcId = id.toLowerCase();
     const contentIndicators = ['content', 'article', 'post', 'entry', 'main', 'body'];
-    if (contentIndicators.some(indicator => lcId.includes(indicator))) {
+    if (contentIndicators.some(function (indicator) { return lcId.includes(indicator); })) {
       return true;
     }
   }

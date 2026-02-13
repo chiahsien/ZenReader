@@ -4,13 +4,19 @@
 
 # Set variables
 EXTENSION_NAME="ZenReader"
-VERSION=$(grep -o '"version": "[^"]*"' manifest.json | cut -d'"' -f4)
+VERSION=$(grep -o '"version": "[^"]*"' src/manifest.json | head -1 | cut -d'"' -f4)
 DATE=$(date +%Y%m%d)
 OUTPUT_FILE="${EXTENSION_NAME}_v${VERSION}_${DATE}.zip"
 
 # Check if version was found
 if [ -z "$VERSION" ]; then
-  echo "Error: Could not extract version from manifest.json"
+  echo "Error: Could not extract version from src/manifest.json"
+  exit 1
+fi
+
+# Check if npm is available
+if ! command -v npm &> /dev/null; then
+  echo "Error: npm is not installed"
   exit 1
 fi
 
@@ -19,63 +25,55 @@ echo "Building ZenReader Chrome Extension..."
 echo "Version: $VERSION"
 echo "Output: $OUTPUT_FILE"
 
-# Create a temporary build directory
-BUILD_DIR="./build"
-rm -rf $BUILD_DIR
-mkdir -p $BUILD_DIR
+# Install dependencies if needed
+if [ ! -d "node_modules" ]; then
+  echo "Installing dependencies..."
+  npm install
+fi
 
-# Required files check
-REQUIRED_FILES=(
-  "manifest.json"
-  "background.js"
-  "styles.css"
-  "_locales"
-  "icons"
-  "content"
-  "about"
-)
+# Run type checking and build
+echo "Running type check..."
+npx tsc --noEmit
+if [ $? -ne 0 ]; then
+  echo "Error: TypeScript type check failed"
+  exit 1
+fi
 
-for file in "${REQUIRED_FILES[@]}"; do
-  if [ ! -e "$file" ]; then
-    echo "Error: Required file/directory '$file' not found"
-    exit 1
-  fi
-done
+echo "Building with Vite..."
+npx vite build
+if [ $? -ne 0 ]; then
+  echo "Error: Vite build failed"
+  exit 1
+fi
 
-# Copy required files to build directory
-echo "Copying files to build directory..."
-cp -r manifest.json background.js styles.css _locales icons content about $BUILD_DIR
+# Verify dist directory exists
+if [ ! -d "dist" ]; then
+  echo "Error: dist directory not found after build"
+  exit 1
+fi
 
-# Remove any development or unnecessary files
-echo "Removing development files..."
-find $BUILD_DIR -name "*.md" -delete
-find $BUILD_DIR -name ".DS_Store" -delete
-find $BUILD_DIR -name "*.log" -delete
-find $BUILD_DIR -name ".git*" -delete
-find $BUILD_DIR -name "*.sh" -delete
-find $BUILD_DIR -name ".vscode" -type d -exec rm -r {} +
+# Remove any development or unnecessary files from dist
+echo "Cleaning dist directory..."
+find dist -name ".DS_Store" -delete
+find dist -name "*.log" -delete
+find dist -name "*.map" -delete
 
-# Create the zip file
+# Create the zip file from dist contents
 echo "Creating zip package..."
-cd $BUILD_DIR || exit
-zip -r ../$OUTPUT_FILE * > /dev/null
+cd dist || exit
+zip -r ../"$OUTPUT_FILE" * > /dev/null
 cd .. || exit
 
 # Verify zip file was created
 if [ ! -f "$OUTPUT_FILE" ]; then
   echo "Error: Failed to create zip file"
-  rm -rf $BUILD_DIR
   exit 1
 fi
-
-# Clean up
-echo "Cleaning up..."
-rm -rf $BUILD_DIR
 
 # Output summary
 echo "------------------------------"
 echo "Build complete!"
 echo "Package created: $OUTPUT_FILE"
-echo "Size: $(du -h $OUTPUT_FILE | cut -f1)"
+echo "Size: $(du -h "$OUTPUT_FILE" | cut -f1)"
 echo "Ready for Chrome Web Store submission."
 echo "------------------------------"

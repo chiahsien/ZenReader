@@ -1,24 +1,12 @@
-/**
- * ZenReader - Shadow DOM Styles Module
- *
- * This script handles creating and applying styles to the Shadow DOM used
- * for the focus mode content. Supports two-phase loading: same-origin styles
- * are injected synchronously, cross-origin sheets are fetched asynchronously
- * via the background service worker.
- */
+import type { ColorSettings } from '../utils/colorUtils';
 
-/**
- * Adds styles to the shadow DOM to maintain original content styling.
- * Phase 1 (sync): base styles, same-origin sheets, inline styles, CSS custom properties.
- * Phase 2 (async): cross-origin sheets fetched via background, @font-face recovery,
- * CSS custom property update from fetched sheets.
- * @param {ShadowRoot} shadow - The shadow root to add styles to
- * @param {Object} colors - The color settings determined for the page
- * @param {Boolean} isMainContent - Whether this is likely main content
- * @param {Function} onCrossOriginComplete - Callback when async fetches finish (optional)
- */
-function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComplete) {
-  var baseStyle = document.createElement('style');
+export function addStylesToShadowDOM(
+  shadow: ShadowRoot,
+  colors: ColorSettings,
+  isMainContent: boolean,
+  onCrossOriginComplete?: (fetchedCSSTexts: string[]) => void,
+): void {
+  const baseStyle = document.createElement('style');
 
   baseStyle.textContent = `
     .shadow-container {
@@ -127,15 +115,14 @@ function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComple
   `;
   shadow.appendChild(baseStyle);
 
-  // Phase 1: inject same-origin custom properties
-  var customProps = collectCSSCustomProperties();
+  const customProps = collectCSSCustomProperties();
   injectCSSCustomProperties(shadow, customProps);
 
-  var crossOriginURLs = [];
-  var sameOriginFontFaces = [];
+  const crossOriginURLs: string[] = [];
+  const sameOriginFontFaces: string[] = [];
 
   try {
-    var styleSheets = Array.from(document.styleSheets);
+    const styleSheets = Array.from(document.styleSheets);
 
     styleSheets.forEach(function (sheet) {
       try {
@@ -146,7 +133,7 @@ function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComple
           return;
         }
 
-        var style = document.createElement('style');
+        const style = document.createElement('style');
 
         Array.from(sheet.cssRules).forEach(function (rule) {
           try {
@@ -169,14 +156,14 @@ function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComple
       }
     });
 
-    var inlineStyles = document.querySelectorAll('style');
+    const inlineStyles = document.querySelectorAll('style');
     inlineStyles.forEach(function (inlineStyle) {
-      var style = document.createElement('style');
+      const style = document.createElement('style');
       style.textContent = inlineStyle.textContent;
       shadow.appendChild(style);
     });
 
-    var specialStylesElement = document.createElement('style');
+    const specialStylesElement = document.createElement('style');
     specialStylesElement.textContent = createSpecialCssRules(colors);
     shadow.appendChild(specialStylesElement);
 
@@ -184,21 +171,19 @@ function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComple
     console.error('Error copying styles to shadow DOM:', e);
   }
 
-  // Inject same-origin @font-face rules into shadow and document head
   if (sameOriginFontFaces.length > 0) {
     injectFontFaces(shadow, sameOriginFontFaces);
   }
 
-  // Phase 2: fetch cross-origin stylesheets asynchronously
   if (crossOriginURLs.length > 0) {
     fetchCrossOriginSheets(shadow, crossOriginURLs, function (fetchedCSSTexts) {
-      var updatedProps = collectCSSCustomProperties();
+      const updatedProps = collectCSSCustomProperties();
       injectCSSCustomProperties(shadow, updatedProps);
 
-      var fetchedFontFaces = [];
-      for (var i = 0; i < fetchedCSSTexts.length; i++) {
-        var extracted = extractFontFaceRules(fetchedCSSTexts[i]);
-        for (var j = 0; j < extracted.length; j++) {
+      const fetchedFontFaces: string[] = [];
+      for (let i = 0; i < fetchedCSSTexts.length; i++) {
+        const extracted = extractFontFaceRules(fetchedCSSTexts[i]);
+        for (let j = 0; j < extracted.length; j++) {
           fetchedFontFaces.push(extracted[j]);
         }
       }
@@ -217,23 +202,20 @@ function addStylesToShadowDOM(shadow, colors, isMainContent, onCrossOriginComple
   }
 }
 
-/**
- * Fetches an array of cross-origin stylesheet URLs via the background service worker
- * and injects the results into the shadow DOM. Uses a 3-second per-sheet timeout.
- * @param {ShadowRoot} shadow - The shadow root to inject fetched CSS into
- * @param {Array} urls - Array of cross-origin stylesheet URLs
- * @param {Function} callback - Called with array of successfully fetched CSS text strings
- */
-function fetchCrossOriginSheets(shadow, urls, callback) {
-  var remaining = urls.length;
-  var fetchedCSSTexts = [];
+function fetchCrossOriginSheets(
+  shadow: ShadowRoot,
+  urls: string[],
+  callback: (texts: string[]) => void,
+): void {
+  let remaining = urls.length;
+  const fetchedCSSTexts: string[] = [];
 
   if (remaining === 0) {
     callback(fetchedCSSTexts);
     return;
   }
 
-  for (var i = 0; i < urls.length; i++) {
+  for (let i = 0; i < urls.length; i++) {
     fetchSingleCrossOriginSheet(shadow, urls[i], function (cssText) {
       if (cssText) {
         fetchedCSSTexts.push(cssText);
@@ -246,14 +228,11 @@ function fetchCrossOriginSheets(shadow, urls, callback) {
   }
 }
 
-/**
- * Fetches a single cross-origin stylesheet via the background service worker
- * and injects it into the shadow DOM. Falls back to a <link> element on failure.
- * @param {ShadowRoot} shadow - The shadow root to inject into
- * @param {String} href - The URL of the stylesheet
- * @param {Function} done - Callback with cssText on success, null on failure
- */
-function fetchSingleCrossOriginSheet(shadow, href, done) {
+function fetchSingleCrossOriginSheet(
+  shadow: ShadowRoot,
+  href: string,
+  done: (cssText: string | null) => void,
+): void {
   try {
     chrome.runtime.sendMessage({ action: 'fetchCSS', url: href }, function (response) {
       if (chrome.runtime.lastError) {
@@ -278,65 +257,52 @@ function fetchSingleCrossOriginSheet(shadow, href, done) {
   }
 }
 
-/**
- * Injects raw CSS text as a <style> element into a shadow root
- * @param {ShadowRoot} shadow - The shadow root
- * @param {String} cssText - The CSS text to inject
- */
-function injectCSSTextIntoShadow(shadow, cssText) {
-  var style = document.createElement('style');
+function injectCSSTextIntoShadow(shadow: ShadowRoot, cssText: string): void {
+  const style = document.createElement('style');
   style.textContent = cssText;
   shadow.appendChild(style);
 }
 
-/**
- * Injects a <link> element as a fallback when CSS text fetch fails
- * @param {ShadowRoot} shadow - The shadow root
- * @param {String} href - The stylesheet URL
- */
-function injectLinkFallback(shadow, href) {
-  var link = document.createElement('link');
+function injectLinkFallback(shadow: ShadowRoot, href: string): void {
+  const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = href;
   shadow.appendChild(link);
 }
 
-/**
- * Collects CSS custom properties (--variables) from :root, documentElement, and body
- * @returns {Object} - Map of property names to their computed values
- */
-function collectCSSCustomProperties() {
-  var properties = {};
+function collectCSSCustomProperties(): Record<string, string> {
+  const properties: Record<string, string> = {};
 
-  var targets = [document.documentElement];
+  const targets = [document.documentElement];
   if (document.body) {
     targets.push(document.body);
   }
 
-  for (var t = 0; t < targets.length; t++) {
+  for (let t = 0; t < targets.length; t++) {
     try {
-      var sheets = Array.from(document.styleSheets);
-      for (var s = 0; s < sheets.length; s++) {
+      const sheets = Array.from(document.styleSheets);
+      for (let s = 0; s < sheets.length; s++) {
         try {
-          var rules = sheets[s].cssRules;
+          const rules = sheets[s].cssRules;
           if (!rules) continue;
 
-          for (var r = 0; r < rules.length; r++) {
-            var rule = rules[r];
+          for (let r = 0; r < rules.length; r++) {
+            const rule = rules[r];
             if (rule.type !== CSSRule.STYLE_RULE) continue;
 
-            var selector = rule.selectorText || '';
+            const styleRule = rule as CSSStyleRule;
+            const selector = styleRule.selectorText || '';
             if (selector === ':root' || selector === 'html' || selector === 'body' ||
                 selector === ':root, html' || selector === 'html, :root') {
-              for (var p = 0; p < rule.style.length; p++) {
-                var propName = rule.style[p];
+              for (let p = 0; p < styleRule.style.length; p++) {
+                const propName = styleRule.style[p];
                 if (propName.indexOf('--') === 0) {
-                  properties[propName] = rule.style.getPropertyValue(propName).trim();
+                  properties[propName] = styleRule.style.getPropertyValue(propName).trim();
                 }
               }
             }
           }
-        } catch (sheetErr) {
+        } catch (_sheetErr) {
           // cross-origin sheet, skip
         }
       }
@@ -348,32 +314,25 @@ function collectCSSCustomProperties() {
   return properties;
 }
 
-/**
- * Injects CSS custom properties into the shadow DOM via a :host {} style block.
- * Removes any previously injected custom property block before creating a new one.
- * @param {ShadowRoot} shadow - The shadow root
- * @param {Object} properties - Map of property names to values
- */
-function injectCSSCustomProperties(shadow, properties) {
-  var existing = shadow.querySelector('style[data-zenreader-custom-props]');
-  if (existing) {
+function injectCSSCustomProperties(shadow: ShadowRoot, properties: Record<string, string>): void {
+  const existing = shadow.querySelector('style[data-zenreader-custom-props]');
+  if (existing && existing.parentNode) {
     existing.parentNode.removeChild(existing);
   }
 
-  var propNames = Object.keys(properties);
+  const propNames = Object.keys(properties);
   if (propNames.length === 0) return;
 
-  var cssLines = [];
-  for (var i = 0; i < propNames.length; i++) {
+  const cssLines: string[] = [];
+  for (let i = 0; i < propNames.length; i++) {
     cssLines.push('  ' + propNames[i] + ': ' + properties[propNames[i]] + ';');
   }
 
-  var style = document.createElement('style');
+  const style = document.createElement('style');
   style.setAttribute('data-zenreader-custom-props', 'true');
   style.textContent = ':host {\n' + cssLines.join('\n') + '\n}\n' +
                        '.shadow-container {\n' + cssLines.join('\n') + '\n}';
 
-  // Insert after base style so custom props are available to all subsequent styles
   if (shadow.firstChild && shadow.firstChild.nextSibling) {
     shadow.insertBefore(style, shadow.firstChild.nextSibling);
   } else {
@@ -382,30 +341,23 @@ function injectCSSCustomProperties(shadow, properties) {
 }
 
 /**
- * Extracts @font-face rule blocks from a CSS text string using regex
- * @param {String} cssText - Raw CSS text to search
- * @returns {Array} - Array of @font-face rule strings
+ * Extracts @font-face rule blocks from CSS text using regex.
+ * The regex matches the @font-face at-rule including its full declaration block.
  */
-function extractFontFaceRules(cssText) {
+export function extractFontFaceRules(cssText: string): string[] {
   if (!cssText) return [];
-  var matches = cssText.match(/@font-face\s*\{[^}]*\}/gi);
+  const matches = cssText.match(/@font-face\s*\{[^}]*\}/gi);
   return matches || [];
 }
 
-/**
- * Injects @font-face rules into both the shadow DOM and the document head.
- * Deduplicates against previously injected rules using a data attribute marker.
- * @param {ShadowRoot} shadow - The shadow root
- * @param {Array} fontFaceRules - Array of @font-face CSS rule strings
- */
-function injectFontFaces(shadow, fontFaceRules) {
+function injectFontFaces(shadow: ShadowRoot, fontFaceRules: string[]): void {
   if (!fontFaceRules || fontFaceRules.length === 0) return;
 
-  var dedupedRules = [];
-  var existingHead = document.querySelector('style[data-zenreader-fonts]');
-  var existingContent = existingHead ? existingHead.textContent : '';
+  const dedupedRules: string[] = [];
+  const existingHead = document.querySelector('style[data-zenreader-fonts]');
+  const existingContent = existingHead ? existingHead.textContent || '' : '';
 
-  for (var i = 0; i < fontFaceRules.length; i++) {
+  for (let i = 0; i < fontFaceRules.length; i++) {
     if (existingContent.indexOf(fontFaceRules[i]) === -1) {
       dedupedRules.push(fontFaceRules[i]);
     }
@@ -413,29 +365,24 @@ function injectFontFaces(shadow, fontFaceRules) {
 
   if (dedupedRules.length === 0) return;
 
-  var combined = dedupedRules.join('\n');
+  const combined = dedupedRules.join('\n');
 
-  var shadowStyle = document.createElement('style');
+  const shadowStyle = document.createElement('style');
   shadowStyle.textContent = combined;
   shadow.appendChild(shadowStyle);
 
-  // Fonts must also load in the main document context for Shadow DOM to use them
+  // Fonts must load in the main document context for Shadow DOM to use them
   if (existingHead) {
     existingHead.textContent += '\n' + combined;
   } else {
-    var headStyle = document.createElement('style');
+    const headStyle = document.createElement('style');
     headStyle.setAttribute('data-zenreader-fonts', 'true');
     headStyle.textContent = combined;
     document.head.appendChild(headStyle);
   }
 }
 
-/**
- * Creates special CSS rules for handling common styling issues
- * @param {Object} colors - The color settings determined for the page
- * @returns {String} - CSS rules as a string
- */
-function createSpecialCssRules(colors) {
+function createSpecialCssRules(colors: ColorSettings): string {
   return `
     *, *::before, *::after {
       max-width: 100% !important;
